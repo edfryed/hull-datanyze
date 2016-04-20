@@ -3,7 +3,6 @@ import bodyParser from 'body-parser';
 import path from 'path';
 import { NotifHandler } from 'hull';
 import readmeRedirect from './lib/readme-redirect-middleware';
-import hullDecorator from './lib/hull-decorator';
 
 const hullHandlers = NotifHandler({
   onSubscribe() {
@@ -11,15 +10,6 @@ const hullHandlers = NotifHandler({
   },
   events: {
     'user_report:update': require('./update-user')
-  }
-});
-
-const clearbitHandlers = hullDecorator({
-  onError(err) {
-    console.warn('Boom error', err, err.stack);
-  },
-  handlers: {
-    webhooks: require('./clearbit-webhooks.js')
   }
 });
 
@@ -33,7 +23,6 @@ module.exports = function (config = {}) {
   app.use(express.static(path.resolve(__dirname, '..', 'assets')));
 
   app.post('/notify', hullHandlers);
-  app.post('/clearbit', clearbitHandlers.webhooks);
 
   app.get('/', readmeRedirect);
   app.get('/readme', readmeRedirect);

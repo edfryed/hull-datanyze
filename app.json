@@ -1,7 +1,7 @@
 {
-  "name": "Hull + Clearbit",
-  "description": "A Hull Integration for Clearbit.",
-  "repository": "https://github.com/hull-ships/hull-clearbit",
+  "name": "Hull + Datanyze",
+  "description": "A Hull Integration for Datanyze.",
+  "repository": "https://github.com/hull-ships/hull-datanyze",
   "website": "http://www.hull.io",
   "success_url": "/readme",
   "env": {

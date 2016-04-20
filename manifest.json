@@ -1,6 +1,6 @@
 {
-  "name": "Clearbit",
-  "description": "Fetch additional customer data from Clearbit",
+  "name": "Datanyze",
+  "description": "Fetch additional customer data from Datanyze",
   "tags": ["incoming", "outgoing"],
   "picture": "picture.png",
   "ui": false,
@@ -15,9 +15,16 @@
       "format": "text"
     },
     {
-      "name":"api_key",
-      "title": "Clearbit API Key",
-      "description":"Clearbit API Key, found in https://dashboard.clearbit.com/keys",
+      "name":"token",
+      "title": "Datanyze Token",
+      "description":"Datanyze Token",
+      "type": "string",
+      "format": "text"
+    },
+    {
+      "name":"username",
+      "title": "Datanyze Username",
+      "description":"Datanyze Username or Email",
       "type": "string",
       "format": "text"
     }
