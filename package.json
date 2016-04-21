@@ -46,7 +46,6 @@
     "babel-register": "^6.7.2",
     "body-parser": "^1.15.0",
     "connect": "^3.4.1",
-    "datanyze": "^1.2.1",
     "ejs": "^2.4.1",
     "express": "^4.13.4",
     "hull": "^0.6.4",
