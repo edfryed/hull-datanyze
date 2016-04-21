@@ -12,7 +12,7 @@ End-Users: [See Readme here](https://dashboard.hullapp.io/readme?url=https://hul
 
 - Go to your `Hull Dashboard > Ships > Add new`
 - Paste the URL for your Heroku deployment, or use ours : `https://hull-datanyze.herokuapp.com/`
-- Enter the Datanyze API Key
+- Enter the Datanyze API Key and username
 - Go to Datanyze and save the following webhook url: `https://hull-datanyze.herokuapp.com/datanyze`
 
 ### Developing :
