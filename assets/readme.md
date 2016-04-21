@@ -4,5 +4,4 @@ Fetch 3rd party data from Datanyze and writes it back into the customer profile.
 
 # Setup
 
-- Go to your [Datanyze dashboard, under API keys](https://dashboard.datanyze.com/keys). Copy the key, Paste it into your Hull Dashboard.
-- Go to your [Datanyze Account Settings](https://dashboard.datanyze.com/account). Under Webhook URL, enter https://hull-datanyze.herokuapp.com/datanyze
+- Go to your [Datanyze dashboard](https://www.datanyze.com/domains/). Find your API key, Paste it into your Hull Dashboard. Enter your account email
