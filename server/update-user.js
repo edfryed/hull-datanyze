@@ -38,10 +38,9 @@ module.exports = function ({ message={} }, { ship, hull }) {
         }
       })
       .on('success', function(data={}, response){
-        console.log("Fetched", data);
         return hull.as(userId).traits({
           ...data,
-          technologies: (_.values(data.technologies)||[]).join(', ')
+          technologies: (_.values(data.technologies)||[])
         }, { source: 'datanyze' });
       })
       .on('error', error.bind(undefined, 'error'))
