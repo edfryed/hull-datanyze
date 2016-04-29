@@ -7,14 +7,17 @@ function error(code='error', err){
 }
 
 module.exports = function ({ message={} }, { ship, hull }) {
-  console.log('Updating User', message);
+
+  if(process.env.DEBUG) {
+    console.log('Updating User', message);
+  }
 
   try {
 
     const { organization, id, secret } = hull.configuration();
     const { user={} } = message;
     const { email="", id: userId, datanyze={}, traits={} } = user;
-    let { rank, domain} = datanyze;
+    let { rank, domain } = datanyze;
     const { username, token, excluded_domains="" } = ship.private_settings;
 
     domain = datanyze.domain || email.split('@')[1] || traits.domain;
@@ -29,7 +32,8 @@ module.exports = function ({ message={} }, { ship, hull }) {
       return;
     }
 
-    if (!skip_search && domain && !rank && username && token) {
+    if (1 || !skip_search && domain && !rank && username && token) {
+      console.log("Searching for domain", user)
       rest.get('http://api.datanyze.com/domain_info/',{
         query: {
           domain,
@@ -38,10 +42,22 @@ module.exports = function ({ message={} }, { ship, hull }) {
         }
       })
       .on('success', function(data={}, response){
-        return hull.as(userId).traits({
-          ...data,
-          technologies: (_.values(data.technologies)||[])
-        }, { source: 'datanyze' });
+        if(process.env.DEBUG) {
+          console.log('Received from Datanyze', data);
+        }
+        if (data && !data.error){
+          const payload = _.reduce({
+            ...data,
+            technologies: (_.values(data.technologies)||[])
+          }, (m, v, k)=>{
+            m[`datanyze/${k}`] = v;
+            return m;
+          }, {})
+          if(process.env.DEBUG) {
+            console.log('Sent', payload);
+          }
+          return hull.as(userId).post('/firehose/traits', payload);
+        }
       })
       .on('error', error.bind(undefined, 'error'))
       .on('fail', error.bind(undefined, 'failure'))
