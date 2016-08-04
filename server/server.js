@@ -1,15 +1,13 @@
-import express from 'express';
-import path from 'path';
+import express from "express";
+import path from "path";
 import updateUser from "./update-user";
 
 module.exports = function Server(options = {}) {
-  const { port, Hull, devMode: dev, hostSecret } = options;
+  const { port, Hull, hostSecret } = options;
   const { BatchHandler, NotifHandler, Routes } = Hull;
   const { Readme, Manifest } = Routes;
   const app = express();
 
-  if (dev) app.use(devMode());
-  app.use(responseTime());
   app.use(express.static(path.resolve(__dirname, "..", "dist")));
   app.use(express.static(path.resolve(__dirname, "..", "assets")));
 
@@ -18,9 +16,6 @@ module.exports = function Server(options = {}) {
   app.get("/manifest.json", Manifest(__dirname));
   app.get("/", Readme);
   app.get("/readme", Readme);
-
-  app.use(bodyParser.urlencoded({ extended: false }));
-  app.use(bodyParser.json());
 
   app.post("/batch", BatchHandler({
     hostSecret,
@@ -34,13 +29,13 @@ module.exports = function Server(options = {}) {
     }
   }));
 
-  app.post('/notify', NotifHandler({
+  app.post("/notify", NotifHandler({
     groupTraits: false,
     onSubscribe() {
-      console.warn('Hello new subscriber !');
+      console.warn("Hello new subscriber !");
     },
     handlers: {
-      'user:update': updateUser
+      "user:update": updateUser
     }
   }));
 
