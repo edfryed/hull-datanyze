@@ -11,8 +11,8 @@
     "url": "https://github.com/hull"
   },
   "engines": {
-    "node": "5.x",
-    "npm": "2.x"
+    "node": "6.x",
+    "npm": "3.x"
   },
   "repository": {
     "type": "git",
