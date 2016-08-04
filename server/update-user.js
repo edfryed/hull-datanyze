@@ -2,68 +2,52 @@ import _ from 'lodash';
 import rest from 'restler';
 import moment from 'moment';
 
-function error(code='error', err){
-  console.log(`Bad/invalid request - ${code} - Datanyze error, or failed request`, err);
+function error(hull, code='error', err){
+  ;
 }
 
 module.exports = function ({ message={} }, { ship, hull }) {
 
-  if(process.env.DEBUG) {
-    console.log('Updating User', message);
-  }
+  hull.logger.debug('datanyze.user.update', message);
 
   try {
 
     const { organization, id, secret } = hull.configuration();
     const { user={} } = message;
-    const { email="", id: userId, datanyze={}, traits={} } = user;
-    let { rank, domain } = datanyze;
-    const { username, token, excluded_domains="" } = ship.private_settings;
+    const { email="", id: userId } = user;
+    const { target_trait, username, token, excluded_domains="" } = ship.private_settings;
 
-    domain = datanyze.domain || email.split('@')[1] || traits.domain;
-    const skip_search = _.includes(_.map((excluded_domains.split(',')||[]),(d)=>d.trim()), domain);
+    if (!token) return hull.logger.info('datanyze.token.missing');
+    if (!username) return hull.logger.error('datanyze.username.missing');
 
-    if (!token) {
-      console.log('No Datanyze Token detected');
-      return;
-    }
-    if (!username) {
-      console.log('No Datanyze Username detected');
-      return;
-    }
+    const domain = user["traits_datanyze/domain"] || user[target_trait];
+    if (!domain) return hull.logger.info('datanyze.skip', { reason: "Could not find a domain"});
 
-    if (1 || !skip_search && domain && !rank && username && token) {
-      console.log("Searching for domain", user)
-      rest.get('http://api.datanyze.com/domain_info/',{
-        query: {
-          domain,
-          email: username,
-          token: token 
-        }
-      })
-      .on('success', function(data={}, response){
-        if(process.env.DEBUG) {
-          console.log('Received from Datanyze', data);
-        }
-        if (data && !data.error){
-          const payload = _.reduce({
-            ...data,
-            technologies: (_.values(data.technologies)||[])
-          }, (m, v, k)=>{
-            m[`datanyze/${k}`] = v;
-            return m;
-          }, {})
-          if(process.env.DEBUG) {
-            console.log('Sent', payload);
-          }
-          return hull.as(userId).post('/firehose/traits', payload);
-        }
-      })
-      .on('error', error.bind(undefined, 'error'))
-      .on('fail', error.bind(undefined, 'failure'))
-      .on('abort', error.bind(undefined,'abort'));
-    }
+    const rank = user["traits_datanyze/rank"];
+    if (!!rank) return hull.logger.info('datanyze.skip', { reason: "Already fetched"});
+
+    const skip_search = _.includes(_.map(excluded_domains.split(','), d => d.trim()), domain);
+    if (!!skip_search) return hull.logger.info('datanyze.skip', { reason: `blacklisted domain, ${domain}`});
+
+    hull.logger.info("datanyze.start", user)
+
+    rest.get('http://api.datanyze.com/domain_info/', { query: { domain, email: username, token: token } })
+    .on('success', function(data={}, response){
+      hull.logger.debug('datanyze.response', data);
+
+      if (data){
+        if (data.error) return hull.logger.error("datanyze.response.error", data.error);
+
+        const technologies = _.values(data.technologies) || [];
+        hull.logger.debug('datanyze.traits.send', payload);
+        return hull.as(userId).traits({...data, technologies }, { source: "datanyze" });
+      }
+    })
+    .on('error', e => hull.logger.error(`datanyze.error`, err.message))
+    .on('fail', e => hull.logger.error(`datanyze.fail`, err.message))
+    .on('abort', e => hull.logger.error(`datanyze.abort`, err.message));
+
   } catch (e){
-    error('Error in datanyze ship', e)
+    hull.logger.error('datanyze.error', e.message);
   }
 }

@@ -1,7 +1,7 @@
 {
   "name": "hull-datanyze",
   "description": "Enrich Customer data with Datanyze",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/hull-ships/hull-datanyze",
   "license": "MIT",
   "main": "bin/start",
@@ -22,9 +22,16 @@
     "url": "https://github.com/hull-ships/hull-datanyze/issues"
   },
   "scripts": {
-    "start": "./bin/start",
-    "lint": "eslint src",
-    "clean": "./node_modules/rimraf/bin.js dist"
+    "build": "npm run clean && npm run build:server",
+    "build:server": "./node_modules/.bin/babel server -d lib",
+    "start": "node ./lib",
+    "start:dev": "NODE_ENV=development ./node_modules/.bin/nodemon -V -w server -x ./node_modules/.bin/babel-node -- server",
+    "test": "npm run test:lint",
+    "test:lint": "./node_modules/.bin/eslint server",
+    "test:modules": "npm outdated --depth=0",
+    "clean": "./node_modules/.bin/rimraf dist; ./node_modules/.bin/rimraf lib",
+    "update": "./node_modules/.bin/updtr",
+    "postinstall": "npm run build"
   },
   "keywords": [
     "hull",
@@ -34,7 +41,7 @@
   "devDependencies": {
     "babel-eslint": "^6.0.2",
     "babel-preset-react": "^6.5.0",
-    "eslint": "^2.8.0",
+    "eslint": "^3.2.2",
     "rimraf": "^2.5.2",
     "webpack": "^1.13.0"
   },
@@ -48,7 +55,7 @@
     "connect": "^3.4.1",
     "ejs": "^2.4.1",
     "express": "^4.13.4",
-    "hull": "^0.6.4",
+    "hull": "^0.9.6",
     "jwt-simple": "^0.5.0",
     "lodash": "^4.11.1",
     "minimist": "^1.2.0",

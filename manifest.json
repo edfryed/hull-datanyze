@@ -8,13 +8,18 @@
   "version": "0.0.1",
   "private_settings": [
     {
+      "name": "target_trait",
+      "title": "Domain Lookup Field",
+      "description": "Choose which field to use to lookup a domain name",
+      "type": "string",
+      "format": "trait"
+    }, {
       "name":"excluded_domains",
-      "title": "Email Domain Excludes",
+      "title": "Domain Excludes",
       "description":"Domains to exclude from fetching. Comma Separated",
       "type": "string",
       "format": "text"
-    },
-    {
+    },{
       "name":"token",
       "title": "Datanyze Token",
       "description":"Datanyze Token",
