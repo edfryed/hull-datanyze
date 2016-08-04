@@ -28,7 +28,7 @@ module.exports = function userUpdate({ message = {} }, { ship, hull }) {
     .on("success", function onLimitSucces(limits = {}) {
       // { "api_hourly": 55, "api_hourly_limit": 1000, "api_daily": 2289, "api_daily_limit": 5000, "api_monthly": 77756, "api_monthly_limit": 2500 }
       if (limits && limits.api_daily && limits.api_monthly_limit && limits.api_daily >= limits.api_monthly_limit / 30) {
-        return hull.logger.warning("datanyze.rate.limit", limits);
+        return hull.logger.warn("datanyze.rate.limit", limits);
       }
 
       rest.get("http://api.datanyze.com/domain_info/", query)
