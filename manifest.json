@@ -1,7 +1,7 @@
 {
   "name": "Datanyze",
   "description": "Fetch additional customer data from Datanyze",
-  "tags": ["outgoing"],
+  "tags": ["outgoing", "batch", "oneColumn"],
   "picture": "picture.png",
   "ui": false,
   "readme" : "readme.md",
