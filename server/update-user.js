@@ -2,7 +2,7 @@ import _ from "lodash";
 import rest from "restler";
 
 module.exports = function userUpdate({ message = {} }, { ship, hull }) {
-  hull.logger.debug("datanyze.user.update", message);
+  hull.logger.debug("datanyze.user.update", JSON.stringify(message.user));
 
   try {
     const { user = {} } = message;
