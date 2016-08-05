@@ -34,7 +34,7 @@ module.exports = function userUpdate({ message = {} }, { ship, hull }) {
       rest.get("http://api.datanyze.com/domain_info/", query)
       .on("success", function onSuccess(data = {}, response = {}) {
         if (!data) return hull.logger.error("datanyze.response.error", { reason: "No Data", response });
-        if (data.error) return hull.logger.error("datanyze.response.error", data.error);
+        if (data.error) return hull.logger.error("datanyze.response.error", JSON.stringify(data));
 
         hull.logger.debug("datanyze.response", data);
         const technologies = _.values(data.technologies) || [];
