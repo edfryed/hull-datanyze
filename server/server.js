@@ -22,6 +22,7 @@ module.exports = function Server(options = {}) {
     batchSize: 100,
     groupTraits: false,
     handler: (notifications = [], { hull, ship }) => {
+      hull.logger.debug("datanyze.batch.process", { notifications: notifications.length });
       notifications.map(({ message }) => {
         message.user = hull.utils.groupTraits(message.user);
         return updateUser({ message }, { hull, ship });
