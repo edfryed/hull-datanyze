@@ -13,7 +13,7 @@ module.exports = function userUpdate({ message = {} }, { ship, hull }) {
     if (!username) return hull.logger.error("datanyze.username.missing");
 
     const domain = user["traits_datanyze/domain"] || user[target_trait];
-    if (!domain) return hull.logger.info("datanyze.skip", { reason: "Could not find a domain" });
+    if (!domain) return hull.logger.info("datanyze.skip", { reason: "Could not find a domain", target: target_trait });
 
     const rank = user["traits_datanyze/rank"];
     if (!!rank) return hull.logger.info("datanyze.skip", { reason: "Already fetched" });
