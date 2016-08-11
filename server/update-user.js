@@ -13,19 +13,20 @@ module.exports = function userUpdate({ message = {} }, { ship, hull }) {
     if (!username) return hull.logger.error("datanyze.username.missing");
 
     const domain = user["traits_datanyze/domain"] || user[target_trait];
-    if (!domain) return hull.logger.info("datanyze.skip", { reason: "Could not find a domain", target: target_trait });
+    if (!domain) return hull.logger.info("datanyze.skip", { reason: "Could not find a domain", target: target_trait, userId });
 
     const rank = user["traits_datanyze/rank"];
-    if (!!rank) return hull.logger.info("datanyze.skip", { reason: "Already fetched" });
+    if (!!rank) return hull.logger.info("datanyze.skip", { reason: "Already fetched", userId });
 
     const skip_search = _.includes(_.map(excluded_domains.split(","), d => d.trim()), domain);
-    if (!!skip_search) return hull.logger.info("datanyze.skip", { reason: `blacklisted domain, ${domain}` });
+    if (!!skip_search) return hull.logger.info("datanyze.skip", { reason: `blacklisted domain, ${domain}`, userId });
 
     hull.logger.info("datanyze.start", user);
 
     const query = { query: { domain, email: username, token } };
     rest.get("http://api.datanyze.com/limits/", query)
     .on("success", function onLimitSucces(limits = {}) {
+      hull.logger.debug("datanyze.rate.debug", limits);
       // { "api_hourly": 55, "api_hourly_limit": 1000, "api_daily": 2289, "api_daily_limit": 5000, "api_monthly": 77756, "api_monthly_limit": 2500 }
       if (limits && limits.api_daily && limits.api_monthly_limit && limits.api_daily >= limits.api_monthly_limit / 30) {
         return hull.logger.warn("datanyze.rate.limit", limits);
