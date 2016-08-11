@@ -21,6 +21,9 @@ module.exports = function userUpdate({ message = {} }, { ship, hull }) {
     const skip_search = _.includes(_.map(excluded_domains.split(","), d => d.trim()), domain);
     if (!!skip_search) return hull.logger.info("datanyze.skip", { reason: `blacklisted domain, ${domain}`, userId });
 
+    const fetched_at = user["traits_datanyze/fetched_at"];
+    if (!!fetched_at) return hull.logger.info("datanyze.skip", { reason: `already fetched, ${fetched_at}`, userId });
+
     hull.logger.info("datanyze.start", user);
 
     const query = { query: { domain, email: username, token } };
@@ -31,6 +34,8 @@ module.exports = function userUpdate({ message = {} }, { ship, hull }) {
       if (limits && limits.api_daily && limits.api_monthly_limit && limits.api_daily >= limits.api_monthly_limit / 30) {
         return hull.logger.warn("datanyze.rate.limit", limits);
       }
+
+      hull.as(userId).traits({ fetched_at: new Date().toISOString() }, { source: "datanyze" });
 
       rest.get("http://api.datanyze.com/domain_info/", query)
       .on("success", function onSuccess(data = {}, response = {}) {
