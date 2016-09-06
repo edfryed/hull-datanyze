@@ -30,10 +30,16 @@ module.exports = function userUpdate({ message = {} }, { ship, hull }) {
     rest.get("http://api.datanyze.com/limits/", query)
     .on("success", function onLimitSucces(limits = {}) {
       hull.logger.debug("datanyze.rate.debug", limits);
+
+      // If we have no limits, something is wrong
+      if (!limits) return hull.logger.warn("datanyze.rate.error", limits);
+
       // { "api_hourly": 55, "api_hourly_limit": 1000, "api_daily": 2289, "api_daily_limit": 5000, "api_monthly": 77756, "api_monthly_limit": 2500 }
-      if (limits && limits.api_daily && limits.api_monthly_limit && limits.api_daily >= limits.api_monthly_limit / 30) {
-        return hull.logger.warn("datanyze.rate.limit", limits);
-      }
+      const { api_hourly, api_daily, api_monthly_limit } = limits;
+
+      // Limit per hour and per day.
+      // TODO: Optimize to regulate limit based on remaining allowance and day of the month so we can optimize usage.
+      if (api_hourly >= api_monthly_limit / (30 * 24) || api_daily >= api_monthly_limit / 30) return hull.logger.warn("datanyze.rate.limit", limits);
 
       hull.as(userId).traits({ fetched_at: new Date().toISOString() }, { source: "datanyze" });
 

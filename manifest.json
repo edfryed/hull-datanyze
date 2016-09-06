@@ -2,6 +2,7 @@
   "name": "Datanyze",
   "description": "Fetch additional customer data from Datanyze",
   "tags": ["outgoing", "batch", "oneColumn"],
+  "admin": "/admin/",
   "picture": "picture.png",
   "ui": false,
   "readme" : "readme.md",

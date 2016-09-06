@@ -1,6 +1,8 @@
 import express from "express";
 import path from "path";
+import { renderFile } from "ejs";
 import updateUser from "./update-user";
+import handleAdmin from "./admin";
 
 module.exports = function Server(options = {}) {
   const { port, Hull, hostSecret } = options;
@@ -8,10 +10,11 @@ module.exports = function Server(options = {}) {
   const { Readme, Manifest } = Routes;
   const app = express();
 
+  app.set("views", `${__dirname}/../views`);
+  app.set("view engine", "ejs");
+  app.engine("html", renderFile);
   app.use(express.static(path.resolve(__dirname, "..", "dist")));
   app.use(express.static(path.resolve(__dirname, "..", "assets")));
-
-  app.set("views", path.resolve(__dirname, "..", "views"));
 
   app.get("/manifest.json", Manifest(__dirname));
   app.get("/", Readme);
@@ -23,10 +26,10 @@ module.exports = function Server(options = {}) {
     groupTraits: false,
     handler: (notifications = [], { hull, ship }) => {
       hull.logger.debug("datanyze.batch.process", { notifications: notifications.length });
-      notifications.map(({ message }) => updateUser({ message }, { hull, ship }) );
+      notifications.map(({ message }) => updateUser({ message }, { hull, ship }));
     }
   }));
-
+  app.get("/admin", Hull.Middleware({ hostSecret, fetchShip: true, cacheShip: true }), handleAdmin);
   app.post("/notify", NotifHandler({
     hostSecret,
     groupTraits: false,

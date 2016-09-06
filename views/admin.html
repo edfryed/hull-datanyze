@@ -1,0 +1,85 @@
+<html>
+<head>
+  <title>Hull <%= name %></title>
+  <link rel="stylesheet" href="//dd04rofzygnm0.cloudfront.net/releases/master/865f04865d2448286626bac92c518a8f8ea8bafe/stylesheets/neue.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/2.1.0/superagent.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3 col-sm-offset-2 col-sm-8 col-xs-offset-1 col-xs-10 mt-2 panel">
+      <div class="panel-body">
+        <div class="mb-1">
+          <h1 class="mb-0 mt-05  text-center"><i class="icon icon-hull" style="font-size:64px;"></i></h1>
+          <h3 class="mt-0 text-center">Datanyze API Usage</h3>
+          <hr>
+          <% if(connected) { %>
+            <h5>Hourly API Calls</h5>
+            <div class="progress">
+              <div class="progress-bar  progress-bar-striped progress-bar-success" role="progressbar" aria-valuenow="<%=progress.hourly%>" aria-valuemin="0" aria-valuemax="100" style="width: <%=progress.hourly%>%; min-width: 60px">
+                <strong><%=limits.api_hourly%> / <%=limits.api_hourly_limit%></strong>
+                <span class="sr-only"><%=limits.api_hourly%> / <%=limits.api_hourly_limit%></span>
+              </div>
+            </div>
+
+            <hr>
+            <h5>Daily API Calls</h5>
+            <div class="progress">
+              <div class="progress-bar  progress-bar-striped progress-bar-warning" role="progressbar" aria-valuenow="<%=progress.daily%>" aria-valuemin="0" aria-valuemax="100" style="width: <%=progress.daily%>%; min-width: 60px">
+                <strong><%=limits.api_daily%> / <%=limits.api_daily_limit%></strong>
+                <span class="sr-only"><%=limits.api_daily%> / <%=limits.api_daily_limit%></span>
+              </div>
+            </div>
+
+            <hr>
+            <h5>Monthly API Calls</h5>
+            <div class="progress">
+              <div class="progress-bar  progress-bar-striped progress-bar-danger" role="progressbar" aria-valuenow="<%=progress.monthly%>" aria-valuemin="0" aria-valuemax="100" style="width: <%=progress.monthly%>%; min-width: 60px">
+                <strong><%=limits.api_monthly%> / <%=limits.api_monthly_limit%></strong>
+                <span class="sr-only"><%=limits.api_monthly%> / <%=limits.api_monthly_limit%></span>
+              </div>
+            </div>
+          <% } else { %>
+            <div class="text-center">
+              <h4 class="text-muted mt-05 mb-0">
+                <span class="check <%=(connected)?'valid':'cross'%>"><i class="icon icon-<%=(connected)?"valid":"cross"%>"></i></span>
+                <%=(connected)?"Connected":"Invalid Credentials" %>
+              </h4>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style type="text/css" media="screen">
+    .check i.icon{
+      font-size: 2pc;
+      position: relative;
+    }
+    .check.valid i.icon {
+      color: rgba(75, 222, 122, 0.52);
+      top: -11px;
+      left: 3px;
+    }
+    .check.cross i.icon {
+      color: rgba(222, 75, 75, 0.52);
+    }
+    .check.valid {
+      border-color: rgba(75, 222, 122, 0.52);
+    }
+    .check.cross {
+      border: none;
+      top: 0;
+      left: -3px;
+    }
+    .check {
+      border-radius: 100px;
+      border: 2px solid transparent;
+      padding: 0 5px;
+      height: 37px;
+      width: 37px;
+      position: relative;
+    }
+  </style>
+</body>
+</html>
