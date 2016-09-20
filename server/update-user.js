@@ -39,7 +39,10 @@ module.exports = function userUpdate({ message = {} }, { ship, hull }) {
 
       // Limit per hour and per day.
       // TODO: Optimize to regulate limit based on remaining allowance and day of the month so we can optimize usage.
-      if (api_hourly >= api_monthly_limit / (30 * 24) || api_daily >= api_monthly_limit / 30) return hull.logger.warn("datanyze.rate.limit", limits);
+      // 2016-09-20 allow small hourly bursts
+      if (api_hourly >= (6 * api_monthly_limit / (30 * 24)) || api_daily >= api_monthly_limit / 30) {
+        return hull.logger.warn("datanyze.rate.limit", limits);
+      }
 
       hull.as(userId).traits({ fetched_at: new Date().toISOString() }, { source: "datanyze" });
 
