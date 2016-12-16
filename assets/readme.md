@@ -1,6 +1,41 @@
-This ship enriches customer profiles using [Datanyze](https://datanyze.com)
+# Hull ♥ Datanyze
 
-Fetch 3rd party data from Datanyze and writes it back into the customer profile.
+Upgrade Hull with data from Datanyze
+
+[Datantyze](https://www.datanyze.com/) is data provider for B2B for customers to query for companies and employees at companies. It has a particular focus on technographics - what tools and technologies a company is using
+
+#### Datanyze data includes:
+
+- Individual identities (name, email, company, location…)
+- Company identities (name, location, employees, revenues, technologies…) including technographics
+
+#### Power your other tools with Datanyze data
+
+With Hull, you can query Datanyze and use the data to enrich profiles in other tools.
+
+Hull can then send those enriched profiles to other tools in native forms including:
+
+- Salesforce
+- HubSpot
+- Intercom
+- Facebook Custom Audiences
+
+Hull can also use that data to add contacts to segments - instance using job title data from Dataynze to create a segment of “VP Marketing - Mailchimp User”. That segment can then be shared with:
+
+- HubSpot
+- Optimizely
+- Slack (trigger a notification)
+- Facebook Custom Audiences
+
+#### More power and control over your Datanyze data
+
+Hull also gives you more flexibility with your data from Datanyze. It enables you to sort, segment, score and combine data from multiple sources and send it straight to the tools they’re needed in a useful format.
+
+- No APIs to tap into
+- No code needed
+- No import/export
+- No complexity
+- No repetitive workflow creation
 
 # Setup
 
