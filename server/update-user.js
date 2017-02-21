@@ -1,8 +1,9 @@
+import Promise from "bluebird";
 import _ from "lodash";
 import Datanyze from "./datanyze";
 
 module.exports = function userUpdateFactory({ cache, queue }) {
-  return function userUpdate({ message = {} }, { ship, hull }) {
+  return function userUpdate({ message = {} }, { ship, hull }, queued = false) {
     try {
       const { user = {} } = message;
       const { id: userId } = user;
@@ -29,9 +30,24 @@ module.exports = function userUpdateFactory({ cache, queue }) {
 
       const datanyze = new Datanyze({ email: username, token, cache, queue });
 
-      datanyze.getDomainInfo(domain).then(data => {
+      return datanyze.getDomainInfo(domain).then(data => {
         if (!data) return hull.logger.error("datanyze.response.error", { reason: "No Data", response });
-        if (data.error) return hull.logger.error("datanyze.response.error", JSON.stringify(data));
+        if (data.error) {
+          hull.logger.error("datanyze.response.error", JSON.stringify(data));
+
+          if (data.error === 103 && queued === false) {
+            return datanyze.addDomain(domain)
+              .then(() => {
+                return queue.create("refetchDomainInfo", {
+                    payload: message,
+                    config: hull.configuration()
+                  })
+                  .delay(process.env.ADD_DOMAIN_DELAY || 1800000)
+                  .removeOnComplete(true)
+                  .save();
+              }, (err) => hull.logger.error("datanyze.addDomain.error", err));
+          }
+        }
 
         hull.logger.debug("datanyze.response", data);
         const technologies = _.values(data.technologies) || [];
@@ -41,8 +57,8 @@ module.exports = function userUpdateFactory({ cache, queue }) {
         return hull.as(userId).traits(payload, { source: "datanyze" });
       }, err => hull.logger.error("datanyze.error", err.message));
     } catch (e) {
-      hull.logger.error("datanyze.error", e.message);
+      hull.logger.error("datanyze.error", e.stack);
     }
-    return true;
+    return Promise.resolve();
   };
 }

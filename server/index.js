@@ -8,6 +8,7 @@ const Hull = require("hull");
 const CacheManager = require("cache-manager");
 const RedisStore = require("cache-manager-redis");
 const Server = require("./server");
+const Worker = require("./worker");
 
 const kue = require("kue");
 
@@ -51,3 +52,6 @@ Server({
   cache,
   queue
 });
+
+
+Worker({ Hull, cache, queue });

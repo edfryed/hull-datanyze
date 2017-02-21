@@ -1,4 +1,4 @@
-import request from "request";
+import request from "request-promise";
 import Promise from "bluebird";
 import { createHash } from "crypto";
 
@@ -66,6 +66,10 @@ export default class DatanyzeClient {
 
   getDomainInfo(domain, tech_details = true) {
     return this.request("domain_info", { domain, tech_details });
+  }
+
+  addDomain(domain) {
+    return this.request("add_domain", { domain });
   }
 
   getLimits() {

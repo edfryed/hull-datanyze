@@ -52,6 +52,7 @@
     "lodash": "^4.14.1",
     "newrelic": "^1.37.2",
     "request": "^2.79.0",
+    "request-promise": "^4.1.1",
     "rimraf": "^2.5.4"
   },
   "devDependencies": {
