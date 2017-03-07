@@ -51,7 +51,7 @@ export default class DatanyzeClient {
       return this.cache.wrap(cacheKey, () => {
         return this.getLimits().then((limits = {}) => {
           const { api_hourly, api_daily, api_monthly_limit } = limits;
-          if (api_hourly >= api_monthly_limit / (30 * 24) || api_daily >= api_monthly_limit / 30) {
+          if (api_hourly >= (6 * api_monthly_limit / (30 * 24)) || api_daily >= api_monthly_limit / 30) {
             throw new RateLimitError(limits);
           }
           return this.exec(path, params);
