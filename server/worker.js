@@ -9,8 +9,8 @@ module.exports = function Worker({ cache, queue, Hull }) {
     hull.logger.info("worker.process", job.id);
     return hull.get(job.data.config.id)
       .then((ship) => {
-        updateUser({ message }, { hull, ship }, true)
+        return updateUser({ message }, { hull, ship }, true);
       })
       .then(() => done(), err => done(err));
   });
-}
+};

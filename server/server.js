@@ -5,7 +5,7 @@ import UpdateUser from "./update-user";
 import handleAdmin from "./admin";
 
 module.exports = function Server(options = {}) {
-  const { port, Hull, hostSecret, cache, queue } = options;
+  const { port, Hull, hostSecret } = options;
   const { BatchHandler, NotifHandler, Routes } = Hull;
   const { Readme, Manifest } = Routes;
   const app = express();

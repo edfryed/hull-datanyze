@@ -1,3 +1,4 @@
+import _ from "lodash";
 import request from "request-promise";
 import Promise from "bluebird";
 import { createHash } from "crypto";
@@ -28,22 +29,19 @@ export default class DatanyzeClient {
 
   exec(path, params = {}) {
     const { token, email } = this;
-    return new Promise((resolve, reject) => {
-      return request({
-        uri: `${BASE_URL}/${path}/`,
-        json: true,
-        qs: { token, email, ...params }
-      }).then((error, response, body) => {
-        if (error) {
-          reject(error);
-        } else if (body && response.statusCode === 200) {
-          resolve(body);
-        } else {
-          const err = new Error(response.statusMessage);
-          err.statusCode = response.statusCode;
-          reject(err);
-        }
-      }, reject);
+    return request({
+      uri: `${BASE_URL}/${path}/`,
+      json: true,
+      resolveWithFullResponse: true,
+      qs: { token, email, ...params }
+    }).then((response) => {
+      const body = response.body;
+      if (body && response.statusCode === 200) {
+        return body;
+      }
+      const err = new Error(response.statusMessage);
+      err.statusCode = response.statusCode;
+      return Promise.reject(err);
     });
   }
 
@@ -65,7 +63,11 @@ export default class DatanyzeClient {
   }
 
   getDomainInfo(domain, tech_details = true) {
-    return this.request("domain_info", { domain, tech_details });
+    return this.request("domain_info", { domain, tech_details })
+      .then(data => {
+        const technologies = _.values(data.technologies) || [];
+        return { ...data, technologies };
+      });
   }
 
   addDomain(domain) {

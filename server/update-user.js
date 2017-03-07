@@ -31,20 +31,21 @@ module.exports = function userUpdateFactory({ cache, queue }) {
       const datanyze = new Datanyze({ email: username, token, cache, queue });
 
       return datanyze.getDomainInfo(domain).then(data => {
-        if (!data) return hull.logger.error("datanyze.response.error", { reason: "No Data", response });
-        if (data.error) {
+        if (!data) return hull.logger.error("datanyze.response.error", { reason: "No Data" });
+        if (data.error && !data.error.redirect_url) {
           hull.logger.error("datanyze.response.error", JSON.stringify(data));
 
           if (data.error === 103 && queued === false) {
             return datanyze.addDomain(domain)
               .then(() => {
+                hull.logger.info("userUpdate.queue.enrich", message);
                 return queue.create("refetchDomainInfo", {
-                    payload: message,
-                    config: hull.configuration()
-                  })
-                  .delay(process.env.ADD_DOMAIN_DELAY || 1800000)
-                  .removeOnComplete(true)
-                  .save();
+                  payload: message,
+                  config: hull.configuration()
+                })
+                .delay(process.env.ADD_DOMAIN_DELAY || 1800000)
+                .removeOnComplete(true)
+                .save();
               }, (err) => hull.logger.error("datanyze.addDomain.error", err));
           }
         }
@@ -61,4 +62,4 @@ module.exports = function userUpdateFactory({ cache, queue }) {
     }
     return Promise.resolve();
   };
-}
+};
