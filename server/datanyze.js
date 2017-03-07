@@ -30,7 +30,7 @@ export default class DatanyzeClient {
     const { token, email } = this;
     return new Promise((resolve, reject) => {
       return request({
-        uri: `${BASE_URL}/${path}`,
+        uri: `${BASE_URL}/${path}/`,
         json: true,
         qs: { token, email, ...params }
       }).then((error, response, body) => {

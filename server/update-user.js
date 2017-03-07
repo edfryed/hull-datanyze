@@ -26,7 +26,7 @@ module.exports = function userUpdateFactory({ cache, queue }) {
       const fetched_at = user["traits_datanyze/fetched_at"];
       if (!!fetched_at) return hull.logger.info("datanyze.skip", { reason: `already fetched, ${fetched_at}`, userId });
 
-      hull.logger.info("datanyze.start", user.email);
+      hull.logger.info("datanyze.start", domain);
 
       const datanyze = new Datanyze({ email: username, token, cache, queue });
 
