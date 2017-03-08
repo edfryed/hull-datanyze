@@ -9,7 +9,7 @@ module.exports = function Worker({ cache, queue, Hull }) {
     hull.logger.info("worker.process", job.id);
     return hull.get(job.data.config.id)
       .then((ship) => {
-        return updateUser({ message }, { hull, ship }, true);
+        return updateUser({ message }, { hull, ship }, { queued: true });
       })
       .then(() => done(), err => done(err));
   });
