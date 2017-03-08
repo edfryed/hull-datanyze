@@ -28,7 +28,7 @@ module.exports = function Server(options = {}) {
     groupTraits: false,
     handler: (notifications = [], { hull, ship }) => {
       hull.logger.debug("datanyze.batch.process", { notifications: notifications.length });
-      notifications.map(({ message }) => updateUser({ message }, { hull, ship }));
+      notifications.map(({ message }) => updateUser({ message }, { hull, ship }, { isBatch: true }));
     }
   }));
   app.get("/admin", Hull.Middleware({ hostSecret, fetchShip: true, cacheShip: true }), handleAdmin);

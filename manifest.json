@@ -9,6 +9,14 @@
   "version": "0.0.1",
   "private_settings": [
     {
+      "name": "synchronized_segments",
+      "title": "Filtered Segments",
+      "description": "Only send if user matches one of these segments. Empty sends no one.",
+      "default": [],
+      "type": "array",
+      "format": "segment"
+    },
+    {
       "name": "target_trait",
       "title": "Domain Lookup Field",
       "description": "Choose which field to use to lookup a domain name",
