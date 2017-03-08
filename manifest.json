@@ -13,7 +13,8 @@
       "title": "Domain Lookup Field",
       "description": "Choose which field to use to lookup a domain name",
       "type": "string",
-      "format": "trait"
+      "format": "trait",
+      "default" : "domain"
     }, {
       "name":"excluded_domains",
       "title": "Domain Excludes",
