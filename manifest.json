@@ -6,14 +6,23 @@
   "picture": "picture.png",
   "ui": false,
   "readme" : "readme.md",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private_settings": [
+    {
+      "name": "synchronized_segments",
+      "title": "Filtered Segments",
+      "description": "Only send if user matches one of these segments. Empty sends no one.",
+      "default": [],
+      "type": "array",
+      "format": "segment"
+    },
     {
       "name": "target_trait",
       "title": "Domain Lookup Field",
       "description": "Choose which field to use to lookup a domain name",
       "type": "string",
-      "format": "trait"
+      "format": "trait",
+      "default" : "domain"
     }, {
       "name":"excluded_domains",
       "title": "Domain Excludes",

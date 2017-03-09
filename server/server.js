@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import { renderFile } from "ejs";
-import updateUser from "./update-user";
+import UpdateUser from "./update-user";
 import handleAdmin from "./admin";
 
 module.exports = function Server(options = {}) {
@@ -9,6 +9,8 @@ module.exports = function Server(options = {}) {
   const { BatchHandler, NotifHandler, Routes } = Hull;
   const { Readme, Manifest } = Routes;
   const app = express();
+
+  const updateUser = UpdateUser(options);
 
   app.set("views", `${__dirname}/../views`);
   app.set("view engine", "ejs");
@@ -26,7 +28,7 @@ module.exports = function Server(options = {}) {
     groupTraits: false,
     handler: (notifications = [], { hull, ship }) => {
       hull.logger.debug("datanyze.batch.process", { notifications: notifications.length });
-      notifications.map(({ message }) => updateUser({ message }, { hull, ship }));
+      notifications.map(({ message }) => updateUser({ message }, { hull, ship }, { isBatch: true }));
     }
   }));
   app.get("/admin", Hull.Middleware({ hostSecret, fetchShip: true, cacheShip: true }), handleAdmin);
@@ -45,4 +47,4 @@ module.exports = function Server(options = {}) {
   app.listen(port);
 
   return app;
-}
+};
