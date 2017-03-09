@@ -3,7 +3,7 @@ import _ from "lodash";
 import Datanyze from "./datanyze";
 
 module.exports = function userUpdateFactory({ cache, queue }) {
-  return function userUpdate({ message = {} }, { ship, hull }, { queued = false, isBatch = false } = {}) {
+  return function userUpdate({ message = {} }, { ship, hull }, { queued = false, attempt = 1, isBatch = false } = {}) {
     try {
       const { user = {}, segments = [] } = message;
       const { synchronized_segments = [] } = ship.private_settings;
@@ -45,12 +45,15 @@ module.exports = function userUpdateFactory({ cache, queue }) {
         if (data.error && !data.error.redirect_url) {
           hull.logger.error("datanyze.response.error", JSON.stringify(data));
 
-          if (data.error === 103 && queued === false) {
+          if (data.error === 103 && attempt <= 2) {
+            hull.logger.info("datanyze.addDomain.attempt", attempt);
+
             return datanyze.addDomain(domain)
               .then(() => {
                 hull.logger.info("userUpdate.queue.enrich", message);
                 return queue.create("refetchDomainInfo", {
                   payload: message,
+                  attempt,
                   config: hull.configuration()
                 })
                 .delay(process.env.ADD_DOMAIN_DELAY || 1800000)
@@ -58,6 +61,7 @@ module.exports = function userUpdateFactory({ cache, queue }) {
                 .save();
               }, (err) => hull.logger.error("datanyze.addDomain.error", err));
           }
+          hull.logger.info("datanyze.addDomain.failed", { attempt, domain });
           data = { ...data.error };
         }
 
