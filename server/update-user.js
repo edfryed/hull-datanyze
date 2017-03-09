@@ -67,6 +67,7 @@ module.exports = function userUpdateFactory({ cache, queue }) {
         hull.logger.debug("datanyze.response", data);
         const technologies = _.map(data.technologies, t => t.name);
         const payload = { ...data, technologies };
+        payload.fetched_at = new Date().toISOString();
         hull.logger.debug("datanyze.traits.send", { ...payload, userId });
 
         return hull.as(userId).traits(payload, { source: "datanyze" });
