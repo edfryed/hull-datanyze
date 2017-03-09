@@ -61,8 +61,7 @@ module.exports = function userUpdateFactory({ cache, queue }) {
                 .save();
               }, (err) => hull.logger.error("datanyze.addDomain.error", err));
           }
-          hull.logger.info("datanyze.addDomain.failed", { attempt, domain });
-          data = { ...data.error };
+          hull.logger.info("datanyze.addDomain.failed", { attempt, domain, error: data.error });
         }
 
         hull.logger.debug("datanyze.response", data);
@@ -71,7 +70,7 @@ module.exports = function userUpdateFactory({ cache, queue }) {
         hull.logger.debug("datanyze.traits.send", { ...payload, userId });
 
         return hull.as(userId).traits(payload, { source: "datanyze" });
-      }, err => hull.logger.error("datanyze.error", err.message));
+      }, err => hull.logger.error("datanyze.error", err.stack));
     } catch (e) {
       hull.logger.error("datanyze.error", e.stack);
     }

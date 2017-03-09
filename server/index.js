@@ -22,7 +22,13 @@ if (REDIS_URL) {
     store: RedisStore,
     url: REDIS_URL,
     compress: true,
-    ttl, max: 10000
+    ttl, max: 10000,
+    isCacheableValue: (value) => {
+      if (value && value.error === 103) {
+        return false;
+      }
+      return value !== undefined && value !== null;
+    }
   });
 } else {
   cache = CacheManager.caching({
