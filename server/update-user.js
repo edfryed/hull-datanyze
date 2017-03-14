@@ -19,7 +19,7 @@ module.exports = function userUpdateFactory({ cache, queue }) {
       if (!synchronized_segments) return hull.logger.error("datanyze.synchronized_segments.empty");
 
       const matchingSegments = _.intersection(userSegmentIds, synchronized_segments).length > 0;
-      if (!matchingSegments) return hull.logger.info("datanyze.user.segments_skip");
+      if (!matchingSegments && !isBatch) return hull.logger.info("datanyze.user.segments_skip");
 
       const domain = user["traits_datanyze/domain"] || user[target_trait];
       if (!domain) return hull.logger.info("datanyze.skip", { reason: "Could not find a domain", target: target_trait, userId });
