@@ -30,7 +30,7 @@ export default class DatanyzeClient {
 
   exec(path, params = {}) {
     const { token, email } = this;
-    this.logger.debug("datanyze.request", params);
+    this.logger.debug("datanyze.request", { path, ...params });
     return request({
       uri: `${BASE_URL}/${path}/`,
       json: true,
