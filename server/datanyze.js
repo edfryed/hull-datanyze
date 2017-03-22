@@ -20,16 +20,17 @@ function getCacheKey(path, params) {
 }
 
 export default class DatanyzeClient {
-  constructor({ email, token, cache, queue }) {
+  constructor({ email, token, cache, queue, logger }) {
     this.email = email;
     this.token = token;
     this.cache = cache;
     this.queue = queue;
+    this.logger = logger;
   }
 
   exec(path, params = {}) {
     const { token, email } = this;
-    console.log("REQ", params);
+    this.logger.debug("datanyze.request", { path, ...params });
     return request({
       uri: `${BASE_URL}/${path}/`,
       json: true,

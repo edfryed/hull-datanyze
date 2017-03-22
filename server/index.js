@@ -12,6 +12,17 @@ const Worker = require("./worker");
 
 const kue = require("kue");
 
+if (process.env.LOGSTASH_HOST && process.env.LOGSTASH_PORT) {
+  const Logstash = require("winston-logstash").Logstash; // eslint-disable-line global-require
+  Hull.logger.add(Logstash, {
+    node_name: name,
+    port: process.env.LOGSTASH_PORT || 1515,
+    host: process.env.LOGSTASH_HOST
+  });
+  Hull.logger.info("logger.start", { transport: "logstash" });
+} else {
+  Hull.logger.info("logger.start", { transport: "console" });
+}
 
 const { PORT = 8082, KUE_PREFIX = "hull-datanyze", WORKER_MODE = "standalone", NODE_ENV, SECRET, REDIS_URL, LOG_LEVEL } = process.env;
 
