@@ -11,7 +11,7 @@ describe("domainUtils", () => {
       .that.is.a("function");
   });
 
-  it("should verify valid functions", () => {
+  it("should verify valid domains", () => {
     [
       "acme.com",
       "subdomain.acme.com",
@@ -24,7 +24,7 @@ describe("domainUtils", () => {
     });
   });
 
-  it("should reject invalid functions", () => {
+  it("should reject invalid domains", () => {
     [
       "__acme.com",
       "subdomain",
