@@ -38,13 +38,19 @@ describe("domainUtils", () => {
 
   it("should get the domain part from url", () => {
     expect(domainUtils.normalize("http://www.domain.com/"))
-      .to.be.eql("www.domain.com");
-    expect(domainUtils.normalize("https://testing.com/some/path"))
+      .to.be.eql("domain.com");
+    expect(domainUtils.normalize("https://www.testing.com/some/path"))
       .to.be.eql("testing.com");
+    expect(domainUtils.normalize("multi.level.subdomains.com/"))
+      .to.be.eql("subdomains.com");
   });
 
   it("should get the domain from string with multiple uris", () => {
     expect(domainUtils.normalize("http://www.domain.com/,www.some.other.address.com"))
-      .to.be.eql("www.domain.com");
+      .to.be.eql("domain.com");
+    expect(domainUtils.normalize("www.domain.com, www.some.other.address.com"))
+      .to.be.eql("domain.com");
+    expect(domainUtils.normalize("das-test1.de; das-test4.de; das-test2.de"))
+      .to.be.eql("das-test1.de");
   });
 });

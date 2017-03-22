@@ -1,21 +1,38 @@
-import URI from "urijs";
+import parseDomain from "parse-domain";
+import _ from "lodash";
 
 /**
  * @param  {String} domain
  * @return {String}
  */
 export function normalize(domain) {
-  let result;
+  let parsedDomain;
   let normalizedDomain;
 
-  try {
-    result = URI.withinString(domain, (u) => u);
-    normalizedDomain = URI(result)
-      .normalizeProtocol()
-      .hostname();
-  } catch (e) {} // eslint-disable-line no-empty
+  // remove spaces
+  domain = domain.replace(" ", "");
+  domain = _.trim(domain, ",;");
 
-  if (!normalizedDomain) {
+  try {
+    // if we have "," or ";" inside the string,
+    // that's surely not a valid domain name,
+    // let's give it a chance and treat that as a list
+    // of domains/urls with separators
+    if (domain.includes(",")) {
+      parsedDomain = domain.split(",")[0];
+    } else if (domain.includes(";")) {
+      parsedDomain = domain.split(";")[0];
+    }
+  } finally {
+    if (!parsedDomain) {
+      parsedDomain = domain;
+    }
+  }
+
+  try {
+    const parsed = parseDomain(parsedDomain);
+    normalizedDomain = `${parsed.domain}.${parsed.tld}`;
+  } catch (e) {
     normalizedDomain = domain;
   }
 
