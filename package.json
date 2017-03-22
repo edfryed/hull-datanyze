@@ -26,8 +26,9 @@
     "build:server": "./node_modules/.bin/babel server -d lib",
     "start": "node ./lib",
     "start:dev": "NODE_ENV=development ./node_modules/.bin/nodemon -V -w server -x ./node_modules/.bin/babel-node -- server",
-    "test": "npm run test:lint",
-    "test:lint": "./node_modules/.bin/eslint server",
+    "test": "npm run test:lint && npm run test:units",
+    "test:units": "NODE_ENV=test mocha --require babel-register -R spec ./tests/* ./tests/**/*",
+    "test:lint": "eslint server",
     "test:modules": "npm outdated --depth=0",
     "clean": "./node_modules/.bin/rimraf dist; ./node_modules/.bin/rimraf lib",
     "update": "./node_modules/.bin/updtr",
@@ -53,15 +54,19 @@
     "newrelic": "^1.37.2",
     "request": "^2.79.0",
     "request-promise": "^4.1.1",
-    "rimraf": "^2.5.4"
+    "rimraf": "^2.5.4",
+    "urijs": "^1.18.9",
+    "winston-logstash": "^0.3.0"
   },
   "devDependencies": {
     "babel-core": "^6.11.4",
     "babel-eslint": "^6.1.2",
     "babel-register": "^6.11.6",
+    "chai": "^3.5.0",
     "eslint": "^2.13.1",
     "eslint-config-airbnb-base": "^3.0.1",
     "eslint-plugin-import": "^1.9.2",
+    "mocha": "^3.2.0",
     "nodemon": "^1.9.2",
     "updtr": "^0.1.15",
     "webpack": "^1.13.1"
