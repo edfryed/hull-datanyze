@@ -113,10 +113,9 @@ module.exports = function userUpdateFactory({ cache }) {
 
                 return ctx.enqueue("refetchDomainInfo", {
                   payload: { message, attempt }
-                })
-                .delay(process.env.ADD_DOMAIN_DELAY || 1800000) // todo
-                .removeOnComplete(true)
-                .save();
+                }, {
+                  delay: process.env.ADD_DOMAIN_DELAY || 1800000
+                });
               }, (err) => client.logger.error("fetch.addDomain.queue.error", { err, ...logIdent }));
           }
           client.logger.info("fetch.addDomain.error", { attempt, domain, error: data.error, ...logIdent });
