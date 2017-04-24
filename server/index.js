@@ -5,7 +5,7 @@ import express from "express";
 import Server from "./server";
 import Worker from "./worker";
 
-const { PORT = 8082, KUE_PREFIX = "hull-datanyze", WORKER_MODE = "standalone", NODE_ENV, SECRET, REDIS_URL, LOG_LEVEL } = process.env;
+const { PORT = 8082, KUE_PREFIX = "hull-datanyze", WORKER_MODE = "standalone", SECRET, REDIS_URL, LOG_LEVEL } = process.env;
 
 if (process.env.NEW_RELIC_LICENSE_KEY) {
   console.warn("Starting newrelic agent with key: ", process.env.NEW_RELIC_LICENSE_KEY);
@@ -69,11 +69,11 @@ connector.setupApp(app);
 const options = {
   connector,
   app,
-  devMode: NODE_ENV === "development", // todo what to do with them ?
-  workerMode: WORKER_MODE,
   cache
 };
 
 connector.startApp(Server(options));
 
-Worker({ connector, cache, queue });
+if (WORKER_MODE === "embedded") {
+  Worker({ connector, cache, queue });
+}

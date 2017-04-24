@@ -4,6 +4,26 @@
   "repository": "https://github.com/hull-ships/hull-datanyze",
   "website": "http://www.hull.io",
   "success_url": "/readme",
-  "env": {},
+  "env": {
+    "SECRET" : {
+      "description" : "A Secret key used to authenticate on Hull API.",
+      "generator" : "secret"
+    },
+    "REDIS_URL" : {
+      "description" : "Defines Redis url."
+    },
+    "LOG_LEVEL": {
+      "description": "Minimum level of system messages to be logged.",
+    },
+    "WORKER_MODE": {
+      "description": "Indicates if app should be run with Worker or not."
+    },
+    "KUE_PREFIX": {
+      "description": "Defines prefix that jobs on queue will be added."
+    },
+    "PORT": {
+      "description": "port on which app should listen."
+    }
+  },
   "scripts": {}
 }
