@@ -1,7 +1,7 @@
 /* global describe, it */
 import { expect } from "chai";
 
-import * as domainUtils from "../server/domain-utils.js"
+import * as domainUtils from "../server/domain-utils.js";
 
 describe("domainUtils", () => {
   it("should expose normalize and verify functions", () => {
