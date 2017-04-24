@@ -126,7 +126,7 @@ module.exports = function userUpdateFactory({ cache }) {
         payload.fetched_at = new Date().toISOString();
         client.logger.debug("datanyze.traits.send", { ...payload, userId });
 
-        return ctx.as(userId).traits(payload, { source: "datanyze" });
+        return client.as(userId).traits(payload, { source: "datanyze" });
       }, err => client.logger.error("fetch.error", { error: err.stack || err, ...logIdent }));
     } catch (e) {
       client.logger.error("user.notification.error", { error: e.stack || e });
