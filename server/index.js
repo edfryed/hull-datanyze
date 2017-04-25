@@ -62,7 +62,7 @@ const queue = new Queue("kue", {
 
 
 const app = express();
-const connector = new Hull.Connector({ port: PORT, hostSecret: SECRET });
+const connector = new Hull.Connector({ port: PORT, hostSecret: SECRET, cache, queue });
 
 connector.setupApp(app);
 
