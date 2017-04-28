@@ -1,3 +1,4 @@
+/* @flow */
 import Hull from "hull";
 import { Cache, Queue } from "hull/lib/infra";
 import RedisStore from "cache-manager-redis";
@@ -11,6 +12,7 @@ if (process.env.NEW_RELIC_LICENSE_KEY) {
   console.warn("Starting newrelic agent with key: ", process.env.NEW_RELIC_LICENSE_KEY);
   require("newrelic"); // eslint-disable-line global-require
 }
+const name = "hull-datanyze";
 
 if (process.env.LOGSTASH_HOST && process.env.LOGSTASH_PORT) {
   const Logstash = require("winston-logstash").Logstash; // eslint-disable-line global-require
