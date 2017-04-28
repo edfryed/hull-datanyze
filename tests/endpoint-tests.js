@@ -10,7 +10,7 @@ import nock from "nock";
 import Server from "../server/server";
 import ClientMock from "./mocks/client-mock";
 
-const port = 8080;
+const port = 8070;
 const app = express();
 const cache = new Cache({
   store: "memory",
@@ -56,7 +56,7 @@ describe("Server", () => {
     it("should connect with datanyze's API and return status OK with admin.html rendered file", (done) => {
       let body = "";
       request
-        .get("http://127.0.0.1:8080/admin")
+        .get(`http://127.0.0.1:${port}/admin`)
         .on("response", (response) => {
           assert(response.statusCode === 200);
           datanyzeMock.done();
