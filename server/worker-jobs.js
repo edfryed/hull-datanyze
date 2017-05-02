@@ -1,7 +1,7 @@
 /* @flow */
 import UpdateUser from "./update-user";
 
-module.exports = function Worker({ cache, connector }: any) {
+module.exports = function WorkerJobs({ cache, connector }: any) {
   connector.worker({
     refetchDomainInfo: (ctx, { message, attempt }) => {
       const updateUser = UpdateUser({ cache });

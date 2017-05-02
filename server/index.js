@@ -3,10 +3,8 @@ import Hull from "hull";
 import { Cache, Queue } from "hull/lib/infra";
 import RedisStore from "cache-manager-redis";
 import express from "express";
-import Server from "./server";
-import Worker from "./worker";
 
-const { PORT = 8082, KUE_PREFIX = "hull-datanyze", WORKER_MODE = "standalone", SECRET, REDIS_URL, LOG_LEVEL } = process.env;
+const { PORT = 8082, KUE_PREFIX = "hull-datanyze", SECRET, REDIS_URL, LOG_LEVEL } = process.env;
 
 if (process.env.NEW_RELIC_LICENSE_KEY) {
   console.warn("Starting newrelic agent with key: ", process.env.NEW_RELIC_LICENSE_KEY);
@@ -66,16 +64,9 @@ const queue = new Queue("kue", {
 const app = express();
 const connector = new Hull.Connector({ port: PORT, hostSecret: SECRET, cache, queue });
 
-connector.setupApp(app);
-
-const options = {
+export default {
   connector,
   app,
-  cache
+  cache,
+  queue
 };
-
-connector.startApp(Server(options));
-
-if (WORKER_MODE === "embedded") {
-  Worker({ connector, cache, queue });
-}
