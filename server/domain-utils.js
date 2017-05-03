@@ -6,7 +6,7 @@ import _ from "lodash";
  * @param  {String} domain
  * @return {String}
  */
-export function normalize(domain: string) {
+export function normalize(domain: string = ""): string {
   let parsedDomain;
   let normalizedDomain;
 
@@ -45,6 +45,6 @@ export function normalize(domain: string) {
  * @param  {String} domain
  * @return {Boolean}
  */
-export function verify(domain: string) {
+export function verify(domain: string): boolean {
   return /\b((?=[a-z0-9-]{1,63}\.)(xn--)?[a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,63}\b/.test(domain);
 }
