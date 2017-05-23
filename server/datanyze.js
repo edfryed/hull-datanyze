@@ -20,11 +20,10 @@ function getCacheKey(path, params) {
 }
 
 export default class DatanyzeClient {
-  constructor({ email, token, cache, queue, logger }) {
+  constructor({ email, token, cache, logger }) {
     this.email = email;
     this.token = token;
     this.cache = cache;
-    this.queue = queue;
     this.logger = logger;
   }
 

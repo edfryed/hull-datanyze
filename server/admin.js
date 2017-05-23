@@ -1,11 +1,12 @@
+/* @flow */
 import rest from "restler";
-export default function admin(req, res) {
+import { Request, Response } from "express";
+export default function admin(req: Request, res: Response) {
   const { username, token } = req.hull.ship.private_settings;
   rest
     .get("http://api.datanyze.com/limits/", { query: { email: username, token } })
     .on("success", function onLimitSucces(limits = {}) {
       req.hull.client.logger.debug("datanyze.rate.debug", limits);
-
       res.render("admin.html", {
         limits,
         progress: {
