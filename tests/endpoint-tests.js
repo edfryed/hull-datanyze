@@ -18,7 +18,7 @@ const cache = new Cache({
 });
 
 const connector = new Hull.Connector({ port, cache, hostSecret: "123" });
-const options = { connector, app };
+const options = { connector };
 
 connector.setupApp(app);
 
@@ -35,7 +35,7 @@ app.use((req, res, next) => {
   next();
 });
 
-connector.startApp(Server(options));
+connector.startApp(Server(app, options));
 
 const datanyzeMock =
   nock("http://api.datanyze.com")

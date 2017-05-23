@@ -1,10 +1,12 @@
 /* @flow */
+import express from "express";
 import { notifHandler, batchHandler } from "hull/lib/utils";
-import updateUser from "./update-user";
-import handleAdmin from "./admin";
 
-module.exports = function Server(options: any = {}) {
-  const { app, connector } = options;
+import updateUser from "./lib/update-user";
+import handleAdmin from "./lib/admin";
+
+export default function server(app: express, options: any = {}): express {
+  const { connector } = options;
 
   app.use("/batch", batchHandler(({ client, ship, cache }, messages = []) => {
     client.logger.debug("datanyze.batch.process", { messages: messages.length });
@@ -26,4 +28,4 @@ module.exports = function Server(options: any = {}) {
   app.get("/admin", connector.clientMiddleware(), handleAdmin);
 
   return app;
-};
+}

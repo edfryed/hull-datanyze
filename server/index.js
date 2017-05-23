@@ -4,25 +4,10 @@ import { Cache, Queue } from "hull/lib/infra";
 import RedisStore from "cache-manager-redis";
 import express from "express";
 
+import server from "./server";
+import worker from "./worker";
+
 const { PORT = 8082, KUE_PREFIX = "hull-datanyze", SECRET, REDIS_URL, LOG_LEVEL } = process.env;
-
-if (process.env.NEW_RELIC_LICENSE_KEY) {
-  console.warn("Starting newrelic agent with key: ", process.env.NEW_RELIC_LICENSE_KEY);
-  require("newrelic"); // eslint-disable-line global-require
-}
-const name = "hull-datanyze";
-
-if (process.env.LOGSTASH_HOST && process.env.LOGSTASH_PORT) {
-  const Logstash = require("winston-logstash").Logstash; // eslint-disable-line global-require
-  Hull.logger.add(Logstash, {
-    node_name: name,
-    port: process.env.LOGSTASH_PORT || 1515,
-    host: process.env.LOGSTASH_HOST
-  });
-  Hull.logger.info("logger.start", { transport: "logstash" });
-} else {
-  Hull.logger.info("logger.start", { transport: "console" });
-}
 
 if (LOG_LEVEL) {
   Hull.logger.transports.console.level = LOG_LEVEL;
@@ -63,10 +48,14 @@ const queue = new Queue("kue", {
 
 const app = express();
 const connector = new Hull.Connector({ port: PORT, hostSecret: SECRET, cache, queue });
+connector.setupApp(app);
 
-export default {
-  connector,
-  app,
-  cache,
-  queue
-};
+if (process.env.COMBINED || process.env.WORKER) {
+  worker(connector, { cache });
+  connector.startWorker();
+}
+
+if (process.env.COMBINED || process.env.SERVER) {
+  server(app, { connector });
+  connector.startApp(app);
+}
