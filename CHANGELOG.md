@@ -2,6 +2,11 @@
 - upgrade connector to hull-node@0.11.0
 - implement new application layout
 
+## v0.1.2
+- normalize and validate domains before requests
+- improve logging
+- adds ELK logger transport
+
 ## v0.1.1
 - don't filter out users during a batch operation
 
