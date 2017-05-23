@@ -1,3 +1,7 @@
+## v0.2.0
+- upgrade connector to hull-node@0.11.0
+- implement new application layout
+
 ## v0.1.1
 - don't filter out users during a batch operation
 
