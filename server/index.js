@@ -40,9 +40,7 @@ if (REDIS_URL) {
 
 const queue = new Queue("kue", {
   prefix: KUE_PREFIX,
-  redis: {
-    host: REDIS_URL || "127.0.0.1"
-  }
+  redis: REDIS_URL
 });
 
 
