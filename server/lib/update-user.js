@@ -133,6 +133,7 @@ module.exports = function userUpdate(ctx: any, messages:Array<Object> = [], { qu
               }, (err) => client.logger.debug("fetch.addDomain.queue.error", { err, ...logIdent }));
           }
           client.logger.debug("fetch.addDomain.error", { attempt, domain, error: data.error, ...logIdent });
+          return Promise.resolve();
         }
 
         const technologies = _.map(data.technologies, t => t.name);
