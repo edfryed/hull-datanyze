@@ -49,7 +49,7 @@ const connector = new Hull.Connector({ port: PORT, hostSecret: SECRET, cache, qu
 connector.setupApp(app);
 
 if (process.env.COMBINED || process.env.WORKER) {
-  worker(connector, { cache });
+  worker(connector);
   connector.startWorker();
 }
 
