@@ -3,8 +3,6 @@ import request from "request-promise";
 import Promise from "bluebird";
 import { createHash } from "crypto";
 
-const BASE_URL = "http://api.datanyze.com";
-
 class RateLimitError extends Error {
   constructor(limits) {
     super("RateLimitError");
@@ -25,13 +23,14 @@ export default class DatanyzeClient {
     this.token = token;
     this.cache = cache;
     this.logger = logger;
+    this.baseUrl = process.env.OVERRIDE_DATANYZE_URL || "http://api.datanyze.com";
   }
 
   exec(path, params = {}) {
     const { token, email } = this;
     this.logger.debug("datanyze.request", { path, ...params });
     return request({
-      uri: `${BASE_URL}/${path}/`,
+      uri: `${this.baseUrl}/${path}/`,
       json: true,
       resolveWithFullResponse: true,
       qs: { token, email, ...params }

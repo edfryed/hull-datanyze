@@ -4,7 +4,7 @@ import _ from "lodash";
 import Datanyze from "./datanyze";
 import * as domainUtils from "./domain-utils";
 
-module.exports = function userUpdate(ctx: any, messages:Array<Object> = [], { queued = false, attempt = 1, isBatch = false }: any = {}) {
+module.exports = function userUpdate(ctx: Object, messages:Array<Object> = [], { queued = false, attempt = 1, isBatch = false }: any = {}) {
   const { ship, client, cache } = ctx;
   try {
     return Promise.all(messages.map(message => {
@@ -126,7 +126,8 @@ module.exports = function userUpdate(ctx: any, messages:Array<Object> = [], { qu
                 client.logger.debug("fetch.addDomain.queue", logIdent);
 
                 return ctx.enqueue("refetchDomainInfo", {
-                  payload: { message, attempt }
+                  message,
+                  attempt
                 }, {
                   delay: process.env.ADD_DOMAIN_DELAY || 1800000
                 });
