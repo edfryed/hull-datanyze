@@ -780,7 +780,7 @@ bluebird@^3.4.7:
   version "3.4.7"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.4.7.tgz#f72d760be09b7f76d08ed8fae98b289a8d05fab3"
 
-body-parser@^1.12.2, body-parser@^1.15.2:
+body-parser@^1.12.2:
   version "1.15.2"
   resolved "https://registry.yarnpkg.com/body-parser/-/body-parser-1.15.2.tgz#d7578cf4f1d11d5f6ea804cef35dc7a7ff6dae67"
   dependencies:
@@ -795,7 +795,7 @@ body-parser@^1.12.2, body-parser@^1.15.2:
     raw-body "~2.1.7"
     type-is "~1.6.13"
 
-body-parser@^1.17.2:
+body-parser@^1.15.2, body-parser@^1.17.2:
   version "1.17.2"
   resolved "https://registry.yarnpkg.com/body-parser/-/body-parser-1.17.2.tgz#f8892abc8f9e627d42aedafbca66bf5ab99104ee"
   dependencies:
@@ -2359,9 +2359,9 @@ https-proxy-agent@^0.3.5:
     debug "2"
     extend "3"
 
-hull@^0.11.2:
-  version "0.11.2"
-  resolved "https://registry.yarnpkg.com/hull/-/hull-0.11.2.tgz#0ec62fbc5cbb635ce7d40cefee22c34969b50c5a"
+hull@^0.11.4:
+  version "0.11.4"
+  resolved "https://registry.yarnpkg.com/hull/-/hull-0.11.4.tgz#ff9a91130bdd75a1b03f63f382d27f268921f076"
   dependencies:
     JSONStream "^1.1.2"
     basic-auth "^1.1.0"
@@ -2391,6 +2391,7 @@ hull@^0.11.2:
     sns-validator "^0.3.0"
     supply "0.0.4"
     urijs "^1.18.7"
+    uuid "^3.0.1"
     winston "^2.2.0"
 
 iconv-lite@0.2.11:
@@ -3002,13 +3003,13 @@ lodash.some@^4.4.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.some/-/lodash.some-4.6.0.tgz#1bb9f314ef6b8baded13b549169b2a945eb68e4d"
 
-lodash@4, lodash@^4.3.0, lodash@latest:
-  version "4.17.4"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
-
-lodash@^4.0.0, lodash@^4.13.1, lodash@^4.14.1, lodash@^4.2.0, lodash@~4.17.2:
+lodash@4, lodash@^4.0.0, lodash@^4.13.1, lodash@^4.14.1, lodash@^4.2.0, lodash@^4.3.0, lodash@~4.17.2:
   version "4.17.2"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.2.tgz#34a3055babe04ce42467b607d700072c7ff6bf42"
+
+lodash@latest:
+  version "4.17.4"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
 longest@^1.0.1:
   version "1.0.1"
@@ -3114,13 +3115,13 @@ mime-db@~1.25.0:
   version "1.25.0"
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.25.0.tgz#c18dbd7c73a5dbf6f44a024dc0d165a1e7b1c392"
 
-mime-types@^2.1.12, mime-types@~2.1.11, mime-types@~2.1.13, mime-types@~2.1.6, mime-types@~2.1.7, mime-types@~2.1.9:
+mime-types@^2.1.12, mime-types@~2.1.11, mime-types@~2.1.13, mime-types@~2.1.7:
   version "2.1.13"
   resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.13.tgz#e07aaa9c6c6b9a7ca3012c69003ad25a39e92a88"
   dependencies:
     mime-db "~1.25.0"
 
-mime-types@~2.1.15:
+mime-types@~2.1.15, mime-types@~2.1.6, mime-types@~2.1.9:
   version "2.1.15"
   resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.15.tgz#a4ebf5064094569237b8cf70046776d09fc92aed"
   dependencies:
@@ -3867,20 +3868,20 @@ raven@^1.1.2:
     stack-trace "0.0.9"
     uuid "3.0.0"
 
-raw-body@^2.1.7, raw-body@~2.1.2, raw-body@~2.1.7:
-  version "2.1.7"
-  resolved "https://registry.yarnpkg.com/raw-body/-/raw-body-2.1.7.tgz#adfeace2e4fb3098058014d08c072dcc59758774"
-  dependencies:
-    bytes "2.4.0"
-    iconv-lite "0.4.13"
-    unpipe "1.0.0"
-
-raw-body@~2.2.0:
+raw-body@^2.1.7, raw-body@~2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/raw-body/-/raw-body-2.2.0.tgz#994976cf6a5096a41162840492f0bdc5d6e7fb96"
   dependencies:
     bytes "2.4.0"
     iconv-lite "0.4.15"
+    unpipe "1.0.0"
+
+raw-body@~2.1.2, raw-body@~2.1.7:
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/raw-body/-/raw-body-2.1.7.tgz#adfeace2e4fb3098058014d08c072dcc59758774"
+  dependencies:
+    bytes "2.4.0"
+    iconv-lite "0.4.13"
     unpipe "1.0.0"
 
 rc@^1.0.0, rc@^1.0.1, rc@~1.1.6:
@@ -4728,14 +4729,14 @@ type-detect@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/type-detect/-/type-detect-1.0.0.tgz#762217cc06db258ec48908a1298e8b95121e8ea2"
 
-type-is@~1.6.13, type-is@~1.6.6:
+type-is@~1.6.13:
   version "1.6.14"
   resolved "https://registry.yarnpkg.com/type-is/-/type-is-1.6.14.tgz#e219639c17ded1ca0789092dd54a03826b817cb2"
   dependencies:
     media-typer "0.3.0"
     mime-types "~2.1.13"
 
-type-is@~1.6.15:
+type-is@~1.6.15, type-is@~1.6.6:
   version "1.6.15"
   resolved "https://registry.yarnpkg.com/type-is/-/type-is-1.6.15.tgz#cab10fb4909e441c82842eafe1ad646c81804410"
   dependencies:
@@ -4864,7 +4865,7 @@ uuid@^2.0.1:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-2.0.3.tgz#67e2e863797215530dff318e5bf9dcebfd47b21a"
 
-uuid@^3.0.0:
+uuid@^3.0.0, uuid@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.0.1.tgz#6544bba2dfda8c1cf17e629a3a305e2bb1fee6c1"
 
