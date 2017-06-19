@@ -1,3 +1,6 @@
+## v0.2.2
+- upgrade to latest hull-node
+
 ## v0.2.1
 - hotfix wrong call
 

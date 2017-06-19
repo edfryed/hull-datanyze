@@ -6,7 +6,7 @@
   "picture": "picture.png",
   "ui": false,
   "readme" : "readme.md",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private_settings": [
     {
       "name": "synchronized_segments",
