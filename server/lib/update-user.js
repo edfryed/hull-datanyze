@@ -5,7 +5,7 @@ import Datanyze from "./datanyze";
 import * as domainUtils from "./domain-utils";
 
 module.exports = function userUpdate(ctx: Object, messages:Array<Object> = [], { queued = false, attempt = 1, isBatch = false }: any = {}) {
-  const { ship, client, cache } = ctx;
+  const { ship, client, cache, metric } = ctx;
   try {
     return Promise.all(messages.map(message => {
       const { user = {}, segments = [] } = message;
@@ -142,6 +142,7 @@ module.exports = function userUpdate(ctx: Object, messages:Array<Object> = [], {
         payload.fetched_at = new Date().toISOString();
         client.logger.debug("datanyze.traits.send", { ...payload, userId });
         client.logger.info("outgoing.user.success", logIdent);
+        metric.increment("ship.outgoing.users");
 
         return client.asUser(userId).traits(payload, { source: "datanyze" });
       }, err => {
