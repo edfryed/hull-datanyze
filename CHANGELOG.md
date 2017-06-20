@@ -1,5 +1,6 @@
 ## v0.2.2
 - upgrade to latest hull-node
+- add `ship.outgoing.users` metric
 
 ## v0.2.1
 - hotfix wrong call
