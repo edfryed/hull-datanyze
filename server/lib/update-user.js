@@ -132,13 +132,11 @@ module.exports = function userUpdate(ctx: Object, messages:Array<Object> = [], {
         const technologies = _.map(data.technologies, t => t.name);
         const payload = { ...data, technologies };
         payload.fetched_at = new Date().toISOString();
-        asUser.logger.debug("outgoing.user.datanyze.traits.send", { ...payload, userId });
-        asUser.logger.info("outgoing.user.success");
+        asUser.logger.info("outgoing.user.success", ...payload);
         metric.increment("ship.outgoing.users");
 
         return client.asUser(userId).traits(payload, { source: "datanyze" });
       }, err => {
-        asUser.logger.debug("outgoing.user.fetch.error", { errors: err.stack || err });
         asUser.logger.error("outgoing.user.error", { errors: err });
       });
     }));
