@@ -7,7 +7,7 @@ import express from "express";
 import server from "./server";
 import worker from "./worker";
 
-const { PORT = 8082, KUE_PREFIX = "hull-datanyze", SECRET, REDIS_URL, LOG_LEVEL } = process.env;
+const { PORT = 8082, KUE_PREFIX = "hull-datanyze", SECRET, REDIS_URL, LOG_LEVEL, OVERRIDE_FIREHOSE_URL } = process.env;
 
 if (LOG_LEVEL) {
   Hull.logger.transports.console.level = LOG_LEVEL;
@@ -45,7 +45,15 @@ const queue = new Queue("kue", {
 
 
 const app = express();
-const connector = new Hull.Connector({ port: PORT, hostSecret: SECRET, cache, queue });
+const connector = new Hull.Connector({
+  port: PORT,
+  hostSecret: SECRET,
+  cache,
+  queue,
+  clientConfig: {
+    firehoseUrl: OVERRIDE_FIREHOSE_URL
+  }
+});
 connector.setupApp(app);
 
 if (process.env.COMBINED || process.env.WORKER) {
