@@ -55,7 +55,10 @@ export default class DatanyzeClient {
             throw new RateLimitError(limits);
           }
           return this.exec(path, params);
-        });
+        })
+          .catch((error) => {
+            this.logger.debug("datanyze.request.error", { errors: error });
+          });
       });
     }
 
