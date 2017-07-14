@@ -23,6 +23,9 @@
     },
     "PORT": {
       "description": "port on which app should listen."
+    },
+    "OVERRIDE_FIREHOSE_URL": {
+      "description": "firehose url"
     }
   },
   "scripts": {}

@@ -25,9 +25,3 @@ npm install -g gulp
 npm install
 gulp
 ```
-
-### Logs :
-
-These log messages are specific for Datanyze Connector :
-  - warn :
-    * datanyze.request.error - encountered error when making request to Datanyze (e.g. API limits exceeded) 
