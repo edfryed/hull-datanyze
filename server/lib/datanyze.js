@@ -68,7 +68,10 @@ export default class DatanyzeClient {
   getDomainInfo(domain, tech_details = true) {
     return this.request("domain_info", { domain, tech_details })
       .then(data => {
-        const technologies = _.values(data.technologies) || [];
+        let technologies;
+        if (data) {
+          technologies = _.values(data.technologies);
+        } else technologies = [];
         return { ...data, technologies };
       });
   }
