@@ -12,12 +12,10 @@ module.exports = function userUpdate(ctx: Object, messages:Array<Object> = [], {
       const { synchronized_segments = [] } = ship.private_settings;
       const userSegmentIds = _.compact(segments).map(s => s.id);
 
-      const { id: userId } = user;
       const { target_trait, username, token, excluded_domains = "" } = ship.private_settings;
       const asUser = client.asUser(_.pick(user, "id", "email", "external_id"));
 
       asUser.logger.debug("user.notification.update");
-
       if (!token) {
         asUser.logger.info("outgoing.user.skip", {
           reason: "token.missing"
@@ -132,10 +130,10 @@ module.exports = function userUpdate(ctx: Object, messages:Array<Object> = [], {
         const technologies = _.map(data.technologies, t => t.name);
         const payload = { ...data, technologies };
         payload.fetched_at = new Date().toISOString();
-        asUser.logger.info("outgoing.user.success", ...payload);
+        asUser.logger.info("outgoing.user.success", payload);
         metric.increment("ship.outgoing.users");
 
-        return client.asUser(userId).traits(payload, { source: "datanyze" });
+        return asUser.traits(payload, { source: "datanyze" });
       }, err => {
         asUser.logger.error("outgoing.user.error", { errors: err });
       });
