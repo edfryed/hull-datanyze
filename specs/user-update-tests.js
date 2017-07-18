@@ -1,7 +1,5 @@
 /* global describe, it, before, after */
-
 import Minihull from "minihull";
-import { expect } from "chai";
 
 import Minidatanyze from "./minidatanyze";
 import bootstrap from "./bootstrap";
@@ -9,7 +7,8 @@ import bootstrap from "./bootstrap";
 process.env.OVERRIDE_DATANYZE_URL = "http://localhost:8002";
 process.env.ADD_DOMAIN_DELAY = 1;
 
-describe("add domain operation", function test() {
+
+describe("update user operation", function test() {
   let minihull;
   let minidatanyze;
   let server;
@@ -24,7 +23,7 @@ describe("add domain operation", function test() {
           minihull.updateFirstShip({
             token: "datanyzeABC",
             username: "datanyzeDEF",
-            synchronized_segments: ["A"],
+            synchronized_segments: ["B"],
             target_trait: "domain"
           });
           done();
@@ -34,10 +33,16 @@ describe("add domain operation", function test() {
     minidatanyze.listen(8002);
   });
 
-  it("should try to add new domain 2 times", (done) => {
+  it("should update user", (done) => {
     minidatanyze.app.get("/domain_info", (req, res) => {
       res.json({
-        error: 103
+        technologies: [
+          {
+            name: "scala",
+          }, {
+            name: "react",
+          }
+        ]
       });
     });
 
@@ -49,12 +54,13 @@ describe("add domain operation", function test() {
       user: { email: "foo@bar.com", domain: "foo.bar" },
       changes: [],
       events: [],
-      segments: [{ id: "A" }]
+      segments: [{ id: "B" }]
     });
 
-    minidatanyze.on("incoming.request.4", (req) => {
-      expect(req.url).to.be.eql("/add_domain/?token=datanyzeABC&email=datanyzeDEF&domain=foo.bar");
-      done();
+    minihull.on("incoming.request", (req) => {
+      if (req.url === "/api/v1/firehose") {
+        done();
+      }
     });
   });
 
