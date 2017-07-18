@@ -1,5 +1,7 @@
 /* global describe, it, before, after */
 import Minihull from "minihull";
+import _ from "lodash";
+import assert from "assert";
 
 import Minidatanyze from "./minidatanyze";
 import bootstrap from "./bootstrap";
@@ -59,6 +61,10 @@ describe("update user operation", function test() {
 
     minihull.on("incoming.request", (req) => {
       if (req.url === "/api/v1/firehose") {
+        const data = req.body.batch[0];
+        assert(data.type === "traits");
+        assert.equal(_.get(data.body, "datanyze/technologies")[0], "scala");
+        assert.equal(_.get(data.body, "datanyze/technologies")[1], "react");
         done();
       }
     });
