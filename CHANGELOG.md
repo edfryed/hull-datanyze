@@ -1,3 +1,7 @@
+## v0.2.3
+- upgrade to latest hull-node (including firehose)
+- more integration tests and test tooling upgrade
+
 ## v0.2.2
 - upgrade to latest hull-node
 - add `ship.outgoing.users` metric
