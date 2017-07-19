@@ -17,42 +17,36 @@ describe("add domain operation", function test() {
     minihull = new Minihull();
     minidatanyze = new Minidatanyze();
     server = bootstrap();
-    setTimeout(() => {
-      minihull.listen(8001);
-      minihull.install("http://localhost:8000")
-        .then(() => {
-          minihull.updateFirstShip({
-            token: "datanyzeABC",
-            username: "datanyzeDEF",
-            synchronized_segments: ["A"],
-            target_trait: "domain"
-          });
-          done();
-        });
-    }, 100);
-
+    minihull.listen(8001).then(done);
     minidatanyze.listen(8002);
+    minihull.stubConnector({
+      id: "123456789012345678901234",
+      private_settings: {
+        token: "datanyzeABC",
+        username: "datanyzeDEF",
+        synchronized_segments: ["A"],
+        target_trait: "domain"
+      }
+    });
   });
 
   it("should try to add new domain 2 times", (done) => {
-    minidatanyze.app.get("/domain_info", (req, res) => {
-      res.json({
+    minidatanyze.stubApp("/domain_info")
+      .respond({
         error: 103
       });
-    });
 
-    minidatanyze.app.get("/add_domain", (req, res) => {
-      res.end("ok");
-    });
+    minidatanyze.stubApp("/add_domain")
+      .respond("ok");
 
-    minihull.sendNotification("user_report:update", {
+    minihull.notifyConnector("123456789012345678901234", "http://localhost:8000/notify", "user_report:update", {
       user: { email: "foo@bar.com", domain: "foo.bar" },
       changes: [],
       events: [],
       segments: [{ id: "A" }]
-    });
+    }).then(() => {});
 
-    minidatanyze.on("incoming.request.4", (req) => {
+    minidatanyze.on("incoming.request#4", (req) => {
       expect(req.url).to.be.eql("/add_domain/?token=datanyzeABC&email=datanyzeDEF&domain=foo.bar");
       done();
     });

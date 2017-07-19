@@ -18,20 +18,19 @@ describe("update user operation", function test() {
     minihull = new Minihull();
     minidatanyze = new Minidatanyze();
     server = bootstrap();
-    setTimeout(() => {
-      minihull.listen(8001);
-      minihull.install("http://localhost:8000")
-        .then(() => {
-          minihull.updateFirstShip({
-            token: "datanyzeABC",
-            username: "datanyzeDEF",
-            synchronized_segments: ["B"],
-            target_trait: "domain"
-          });
-          done();
-        });
-    }, 100);
-
+    minihull.listen(8001).then(done);
+    minihull.stubConnector({
+      id: "123456789012345678901234",
+      private_settings: {
+        token: "datanyzeABC",
+        username: "datanyzeDEF",
+        synchronized_segments: ["B"],
+        target_trait: "domain"
+      }
+    });
+    // minihull.stubSegments([{
+    //   id: "B"
+    // }]);
     minidatanyze.listen(8002);
   });
 
@@ -52,12 +51,12 @@ describe("update user operation", function test() {
       res.end("ok");
     });
 
-    minihull.sendNotification("user_report:update", {
+    minihull.notifyConnector("123456789012345678901234", "http://localhost:8000/notify", "user_report:update", {
       user: { email: "foo@bar.com", domain: "foo.bar" },
       changes: [],
       events: [],
       segments: [{ id: "B" }]
-    });
+    }).then(() => {});
 
     minihull.on("incoming.request", (req) => {
       if (req.url === "/api/v1/firehose") {
