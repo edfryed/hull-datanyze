@@ -28,9 +28,6 @@ describe("update user operation", function test() {
         target_trait: "domain"
       }
     });
-    // minihull.stubSegments([{
-    //   id: "B"
-    // }]);
     minidatanyze.listen(8002);
   });
 
