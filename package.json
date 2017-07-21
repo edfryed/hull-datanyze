@@ -26,13 +26,13 @@
     "build:server": "babel server -d lib",
     "start": "node ./lib",
     "start:dev": "COMBINED=true babel-watch -L server",
-    "test": "npm run test:lint && npm run test:flow && npm run test:units && npm run test:specs",
-    "test:units": "NODE_ENV=test mocha --require babel-register -R spec ./tests/* ./tests/**/*",
-    "test:specs": "mocha --require babel-register -R spec ./specs",
+    "test": "npm run test:lint && npm run test:flow && npm run test:unit && npm run test:integration",
+    "test:unit": "NODE_ENV=test mocha --require babel-register -R spec ./test/unit/*.js",
+    "test:integration": "mocha --require babel-register -R spec ./test/integration/*.js",
     "test:lint": "eslint server",
     "test:flow": "flow check",
-    "clean": "./node_modules/.bin/rimraf dist; ./node_modules/.bin/rimraf lib",
-    "update": "./node_modules/.bin/updtr",
+    "clean": "rimraf dist; rimraf lib",
+    "update": "updtr",
     "postinstall": "npm run build"
   },
   "keywords": [

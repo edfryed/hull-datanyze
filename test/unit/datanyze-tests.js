@@ -2,8 +2,8 @@
 import assert from "assert";
 import { Cache } from "hull/lib/infra";
 import nock from "nock";
-import ClientMock from "./mocks/client-mock";
-import Datanyze from "../server/lib/datanyze";
+import ClientMock from "./support/client-mock";
+import Datanyze from "../../server/lib/datanyze";
 import sinon from "sinon";
 
 

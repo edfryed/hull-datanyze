@@ -3,8 +3,8 @@ import Minihull from "minihull";
 import _ from "lodash";
 import assert from "assert";
 
-import Minidatanyze from "./minidatanyze";
-import bootstrap from "./bootstrap";
+import Minidatanyze from "./support/minidatanyze";
+import bootstrap from "./support/bootstrap";
 
 process.env.OVERRIDE_DATANYZE_URL = "http://localhost:8002";
 process.env.ADD_DOMAIN_DELAY = 1;

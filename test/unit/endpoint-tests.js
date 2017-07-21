@@ -7,8 +7,8 @@ import Hull from "hull";
 import { Cache } from "hull/lib/infra";
 import request from "request";
 import nock from "nock";
-import Server from "../server/server";
-import ClientMock from "./mocks/client-mock";
+import Server from "../../server/server";
+import ClientMock from "./support/client-mock";
 
 const port = 8070;
 const app = express();

@@ -1,8 +1,8 @@
 import { Connector } from "hull";
 import express from "express";
 
-import server from "../server/server";
-import worker from "../server/worker";
+import server from "../../../server/server";
+import worker from "../../../server/worker";
 
 export default function bootstrap() {
   const app = express();
