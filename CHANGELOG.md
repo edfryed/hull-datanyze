@@ -1,5 +1,5 @@
 ## v0.2.3
-- upgrade to latest hull-node (including firehose)
+- upgrade to hull-node@0.12.0 (including firehose)
 - more integration tests and test tooling upgrade
 
 ## v0.2.2
