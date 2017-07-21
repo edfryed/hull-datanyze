@@ -31,6 +31,7 @@
     "test:integration": "mocha --require babel-register -R spec ./test/integration/*.js",
     "test:lint": "eslint server",
     "test:flow": "flow check",
+    "test:coverage": "nyc --babel-cache --hook-run-in-context false npm test",
     "clean": "rimraf dist; rimraf lib",
     "update": "updtr",
     "postinstall": "npm run build"
@@ -51,7 +52,7 @@
     "cheerio": "^0.22.0",
     "ejs": "^2.5.6",
     "express": "^4.14.0",
-    "hull": "0.12.0-beta.3",
+    "hull": "0.12.0",
     "kue": "^0.11.5",
     "lodash": "^4.14.1",
     "newrelic": "^1.39.1",
@@ -76,6 +77,7 @@
     "minihull": "^2.0.0",
     "mocha": "^3.2.0",
     "nodemon": "^1.9.2",
+    "nyc": "^11.0.3",
     "sinon": "^2.3.8",
     "updtr": "^0.1.15",
     "webpack": "^1.13.1"
