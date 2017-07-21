@@ -3,6 +3,7 @@ import Hull from "hull";
 import { Cache, Queue } from "hull/lib/infra";
 import RedisStore from "cache-manager-redis";
 import express from "express";
+import KueAdapter from "hull/lib/infra/queue/adapter/kue";
 
 import server from "./server";
 import worker from "./worker";
@@ -38,11 +39,12 @@ if (REDIS_URL) {
   });
 }
 
-const queue = new Queue("kue", {
+const kueAdapter = new KueAdapter({
   prefix: KUE_PREFIX,
   redis: REDIS_URL
 });
 
+const queue = new Queue(kueAdapter);
 
 const app = express();
 const connector = new Hull.Connector({

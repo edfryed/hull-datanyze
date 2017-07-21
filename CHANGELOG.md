@@ -1,3 +1,6 @@
+## v0.2.4
+- load queue adapter properly
+
 ## v0.2.3
 - upgrade to hull-node@0.12.0 (including firehose)
 - more integration tests and test tooling upgrade
