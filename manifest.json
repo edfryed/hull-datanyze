@@ -1,6 +1,6 @@
 {
   "name": "Datanyze",
-  "description": "Fetch additional customer data from Datanyze",
+  "description": "Maximize account-based based engagement with Datanyze data in all your tools",
   "tags": ["outgoing", "batch", "oneColumn"],
   "admin": "/admin/",
   "picture": "picture.png",
