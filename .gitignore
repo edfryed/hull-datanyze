@@ -8,3 +8,5 @@ npm-debug.log
 /lib
 .nyc_output
 coverage
+.vscode
+package-lock.json
