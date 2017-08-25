@@ -10,9 +10,9 @@ export default function server(app: express, options: any = {}): express {
 
   app.use("/batch", notifHandler({
     handlers: {
-      "user:update": ({ client, ship, cache }, messages = []) => {
-        client.logger.debug("datanyze.batch.process", { messages: messages.length });
-        return updateUser({ client, ship, cache }, messages, { isBatch: true });
+      "user:update": (ctx, messages = []) => {
+        ctx.client.logger.debug("datanyze.batch.process", { messages: messages.length });
+        return updateUser(ctx, messages, { isBatch: true });
       }
     }
   }));
