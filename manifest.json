@@ -6,7 +6,7 @@
   "picture": "picture.png",
   "ui": false,
   "readme" : "readme.md",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "private_settings": [
     {
       "type": "string",
@@ -56,7 +56,7 @@
       "type": "string",
       "format": "trait",
       "default" : "domain"
-    }, 
+    },
     {
       "name":"excluded_domains",
       "title": "Excluded the following domains from Enrichment",
