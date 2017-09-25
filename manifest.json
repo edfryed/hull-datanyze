@@ -1,40 +1,18 @@
 {
   "name": "Datanyze",
-  "description": "Fetch additional customer data from Datanyze",
+  "description": "Maximize account-based engagement with Datanyze data in all your tools",
   "tags": ["outgoing", "batch", "oneColumn"],
   "admin": "/admin/",
   "picture": "picture.png",
   "ui": false,
   "readme" : "readme.md",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "private_settings": [
     {
-      "name": "synchronized_segments",
-      "title": "Filtered Segments",
-      "description": "Only send if user matches one of these segments. Empty sends no one.",
-      "default": [],
-      "type": "array",
-      "format": "segment"
-    },
-    {
-      "name": "target_trait",
-      "title": "Domain Lookup Field",
-      "description": "Choose which field to use to lookup a domain name",
       "type": "string",
-      "format": "trait",
-      "default" : "domain"
-    }, {
-      "name":"excluded_domains",
-      "title": "Domain Excludes",
-      "description":"Domains to exclude from fetching. Comma Separated",
-      "type": "string",
-      "format": "text"
-    },{
-      "name":"token",
-      "title": "Datanyze Token",
-      "description":"Datanyze Token",
-      "type": "string",
-      "format": "text"
+      "format": "title",
+      "name": "authentication_hero",
+      "title": "Authentication"
     },
     {
       "name":"username",
@@ -42,6 +20,56 @@
       "description":"Datanyze Username or Email",
       "type": "string",
       "format": "text"
+    },
+    {
+      "name":"token",
+      "title": "Datanyze API Token",
+      "description":"You can find your personal API Token at https://www.datanyze.com/settings/?tab=api",
+      "type": "string",
+      "format": "text"
+    },
+    {
+      "type": "string",
+      "format": "title",
+      "name": "enrich_hero",
+      "title": "Enrichment",
+      "description": "Enhance user profiles with Datanyze technographic and firmographic data points."
+    },
+    {
+      "name": "synchronized_segments",
+      "title": "Enrich users belonging to one of these segments",
+      "default": [],
+      "type": "array",
+      "format": "segment"
+    },
+    {
+      "name": "synchronized_segments_hero",
+      "type": "string",
+      "headerTemplate": "The above list of segments is a whitelist. You need to *explicitely specify one or more segments* for which enrichment shall be performed.<br>If you do not specify any segment, no user will be sent to the Datanyze API.",
+      "format": "information",
+      "title": "Whitelisted Segments"
+    },
+    {
+      "name": "target_trait",
+      "title": "Attribute that defines the company domain",
+      "description": "The connector will use the value of this attribute as domain when fetching people from Datanyze.",
+      "type": "string",
+      "format": "trait",
+      "default" : "domain"
+    },
+    {
+      "name":"excluded_domains",
+      "title": "Excluded the following domains from Enrichment",
+      "description":"Please specify domain values as comma-separated list.",
+      "type": "string",
+      "format": "text"
+    },
+    {
+      "name": "excluded_domains_hero",
+      "type": "string",
+      "headerTemplate": "The above list of domains is a blacklist. You need to *explicitely specify one or more domains* for which enrichment shall be skipped.<br>If you do not specify any domain, the connector will perform a call to the Datanyze API for every user matching one of the whitelisted segments. Please note that each call will count towards your monthly rate limit.",
+      "format": "information",
+      "title": "Blacklisted Domains"
     }
   ],
   "resources": [],
