@@ -72,7 +72,9 @@ export default class DatanyzeClient {
         if (data) {
           technologies = _.values(data.technologies);
         } else technologies = [];
-        return { ...data, technologies };
+        const ret = _.omit(data, ["mobile"]);
+        ret.technologies = technologies;
+        return ret;
       });
   }
 
