@@ -34,6 +34,8 @@ describe("update user operation", function test() {
   it("should update user", (done) => {
     minidatanyze.app.get("/domain_info", (req, res) => {
       res.json({
+        foo: "bar",
+        mobile: { crazy: "Stuff" },
         technologies: [
           {
             name: "scala",
@@ -59,8 +61,9 @@ describe("update user operation", function test() {
       if (req.url === "/api/v1/firehose") {
         const data = req.body.batch[0];
         assert(data.type === "traits");
-        assert.equal(_.get(data.body, "datanyze/technologies")[0], "scala");
-        assert.equal(_.get(data.body, "datanyze/technologies")[1], "react");
+        assert.deepEqual(data.body["datanyze/technologies"], ["scala", "react"]);
+        assert.deepEqual(data.body["datanyze/foo"], "bar");
+        assert.deepEqual(data.body["datanyze/mobile"], undefined);
         done();
       }
     });
