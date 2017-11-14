@@ -1,3 +1,6 @@
+## v0.2.6
+- ignore `datanyze/mobile` object
+
 ## v0.2.5
 - documentation
 - improved admin panel
