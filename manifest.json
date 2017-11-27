@@ -1,14 +1,14 @@
 {
   "name": "Datanyze",
   "description": "Maximize account-based engagement with Datanyze data in all your tools",
-  "tags": ["outgoing", "batch", "oneColumn"],
+  "tags": ["outgoing", "batch", "oneColumn", "smart-notifier"],
   "admin": "/admin/",
   "source": "datanyze",
   "logo": "logo.png",
   "picture": "picture.png",
   "ui": false,
   "readme" : "readme.md",
-  "version": "0.2.6",
+  "version": "0.3.0",
   "private_settings": [
     {
       "type": "string",
@@ -75,5 +75,5 @@
     }
   ],
   "resources": [],
-  "subscriptions" : [ { "url" : "/notify" } ]
+  "subscriptions" : [ { "url" : "/smart-notifier" } ]
 }
