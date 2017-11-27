@@ -5,7 +5,14 @@ import Datanyze from "./datanyze";
 import * as domainUtils from "./domain-utils";
 
 module.exports = function userUpdate(ctx: Object, messages:Array<Object> = [], { queued = false, attempt = 1, isBatch = false }: any = {}) {
-  const { ship, client, cache, metric } = ctx;
+  const { ship, client, cache, metric, smartNotifierResponse } = ctx;
+
+  if (smartNotifierResponse) {
+    smartNotifierResponse.setFlowControl({
+      type: "next", size: 100, in: 100
+    });
+  }
+
   try {
     return Promise.all(messages.map(message => {
       const { user = {}, segments = [] } = message;
@@ -130,7 +137,7 @@ module.exports = function userUpdate(ctx: Object, messages:Array<Object> = [], {
         const technologies = _.map(data.technologies, t => t.name);
         const payload = { ...data, technologies };
         payload.fetched_at = new Date().toISOString();
-        asUser.logger.info("outgoing.user.success", payload);
+        asUser.logger.info("outgoing.user.success");
         metric.increment("ship.outgoing.users");
 
         return asUser.traits(payload, { source: "datanyze" });

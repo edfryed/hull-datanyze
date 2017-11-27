@@ -1,6 +1,6 @@
 /* @flow */
 import express from "express";
-import { notifHandler } from "hull/lib/utils";
+import { notifHandler, smartNotifierHandler } from "hull/lib/utils";
 
 import updateUser from "./lib/update-user";
 import handleAdmin from "./lib/admin";
@@ -18,6 +18,12 @@ export default function server(app: express, options: any = {}): express {
   }));
 
   app.use("/notify", notifHandler({
+    handlers: {
+      "user:update": updateUser
+    }
+  }));
+
+  app.use("/smart-notifier", smartNotifierHandler({
     handlers: {
       "user:update": updateUser
     }
