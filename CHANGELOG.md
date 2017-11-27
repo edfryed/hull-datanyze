@@ -1,3 +1,6 @@
+## v0.3.0
+- upgrade hull to 0.13.6 + add support for smart-notifier
+
 ## v0.2.6
 - ignore `datanyze/mobile` object
 
