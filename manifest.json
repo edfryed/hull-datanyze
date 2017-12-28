@@ -3,6 +3,8 @@
   "description": "Maximize account-based engagement with Datanyze data in all your tools",
   "tags": ["outgoing", "batch", "oneColumn"],
   "admin": "/admin/",
+  "source": "datanyze",
+  "logo": "logo.png",
   "picture": "picture.png",
   "ui": false,
   "readme" : "readme.md",
