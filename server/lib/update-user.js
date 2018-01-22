@@ -101,7 +101,7 @@ module.exports = function userUpdate(ctx: Object, messages:Array<Object> = [], {
 
       asUser.logger.info("outgoing.user.start", { domain });
 
-      const datanyze = new Datanyze({ email: username, token, cache, logger: client.logger });
+      const datanyze = new Datanyze({ email: username, token, cache, logger: asUser.logger, metric });
 
       return datanyze.getDomainInfo(domain).then(data => {
         asUser.logger.debug("outgoing.user.fetch.response", { response: data });

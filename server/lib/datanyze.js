@@ -18,7 +18,7 @@ function getCacheKey(path, params) {
 }
 
 export default class DatanyzeClient {
-  constructor({ email, token, cache, logger }) {
+  constructor({ metric, email, token, cache, logger }) {
     this.email = email;
     this.token = token;
     this.cache = cache;
@@ -37,8 +37,12 @@ export default class DatanyzeClient {
     }).then((response) => {
       const body = response.body;
       if (body && response.statusCode === 200) {
+        if (path!=="limits") {
+          this.metric.increment("ship.service_api.call")
+        }
         return body;
       }
+      this.metric.increment("ship.service_api.error")
       const err = new Error(response.statusMessage);
       err.statusCode = response.statusCode;
       return Promise.reject(err);
@@ -50,7 +54,8 @@ export default class DatanyzeClient {
       const cacheKey = getCacheKey(path, params);
       return this.cache.wrap(cacheKey, () => {
         return this.getLimits().then((limits = {}) => {
-          const { api_hourly, api_daily, api_monthly_limit } = limits;
+          const { api_hourly, api_daily, api_monthly_limit, api_monthly } = limits;
+          this.metric.value("ship.service_api.remaining", api_monthly_limit - api_monthly);
           if (api_hourly >= (6 * api_monthly_limit / (30 * 24)) || api_daily >= api_monthly_limit / 30) {
             throw new RateLimitError(limits);
           }
