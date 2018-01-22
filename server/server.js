@@ -1,11 +1,10 @@
 /* @flow */
-import type express from "express";
 import { notifHandler } from "hull/lib/utils";
 
 import { statusHandler, adminHandler, notifyHandler } from "./handlers";
 import updateUser from "./lib/update-user";
 
-export default function server(app: express, options: any = {}): express {
+export default function server(app, options = {}): express {
   const { connector } = options;
 
   app.use(
