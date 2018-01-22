@@ -5,147 +5,218 @@ import _ from "lodash";
 import Datanyze from "./datanyze";
 import * as domainUtils from "./domain-utils";
 
-module.exports = function userUpdate(ctx: Object, messages:Array<Object> = [], { queued = false, attempt = 1, isBatch = false }: any = {}) {
+module.exports = function userUpdate(
+  ctx: Object,
+  messages: Array<Object> = [],
+  { queued = false, attempt = 1, isBatch = false }: any = {}
+) {
   const { ship, client, cache, metric, smartNotifierResponse } = ctx;
 
   if (smartNotifierResponse) {
     smartNotifierResponse.setFlowControl({
-      type: "next", size: 100, in: 100
+      type: "next",
+      size: 100,
+      in: 100
     });
   }
 
   try {
-    return Promise.all(messages.map(message => {
-      const { user = {}, segments = [] } = message;
-      const { synchronized_segments = [] } = ship.private_settings;
-      const userSegmentIds = _.compact(segments).map(s => s.id);
+    return Promise.all(
+      messages.map(message => {
+        const { user = {}, account, segments = [] } = message;
+        const userSegmentIds = _.compact(segments).map(s => s.id);
 
-      const { target_trait, username, token, excluded_domains = "" } = ship.private_settings;
-      const asUser = client.asUser(_.pick(user, "id", "email", "external_id"));
+        const {
+          synchronized_segments = [],
+          handle_accounts = false,
+          target_trait,
+          username,
+          token,
+          excluded_domains = ""
+        } = ship.private_settings;
 
-      asUser.logger.debug("user.notification.update");
-      if (!token) {
-        asUser.logger.info("outgoing.user.skip", {
-          reason: "token.missing"
-        });
-        return Promise.resolve();
-      }
-      if (!username) {
-        asUser.logger.info("outgoing.user.skip", {
-          reason: "username.missing"
-        });
-        return Promise.resolve();
-      }
-      if (!synchronized_segments) {
-        asUser.logger.info("outgoing.user.skip", {
-          reason: "synchronized_segments.empty"
-        });
-        return Promise.resolve();
-      }
+        // Build a target client, which will be
+        // either scoped to account or user depending on the manifest setting
+        const targetClient = handle_accounts
+          ? client.asAccount(account)
+          : client.asUser(user);
 
-      const matchingSegments = _.intersection(userSegmentIds, synchronized_segments).length > 0;
-      if (!matchingSegments && !isBatch) {
-        asUser.logger.info("outgoing.user.skip", {
-          reason: "datanyze.user.segments_skip"
-        });
-        return Promise.resolve();
-      }
+        const datanyzeAccount = handle_accounts
+          ? _.get(client.utils.groupTraits(account), "datanyze", {})
+          : {};
 
-      const domain = domainUtils.normalize(user[target_trait]);
-      if (!domain) {
-        asUser.logger.info("outgoing.user.skip", {
-          reason: "Could not find a domain",
-          target: target_trait,
+        const type = handle_accounts ? "account" : "user";
+
+        // All good, let's start
+        targetClient.logger.info(`outgoing.${type}.start`);
+
+        const skip = data => {
+          targetClient.logger.info(`outgoing.${type}.skip`, data);
+          return Promise.resolve();
+        };
+
+        // Skip because we don't have a token
+        if (!token) return skip({ reason: "token.missing" });
+
+        // Skip because we don't have a username
+        if (!username) return skip({ reason: "username.missing" });
+
+        // Skip because we don't have a segment whitelist
+        if (!synchronized_segments) {
+          return skip({ reason: "synchronized_segments.empty" });
+        }
+
+        // Skip because user segments don't match
+        const matchingSegments =
+          _.intersection(userSegmentIds, synchronized_segments).length > 0;
+
+        if (!matchingSegments && !isBatch) {
+          return skip({ reason: "datanyze.user.segments_skip" });
+        }
+
+        // Skip because can't find a Domain name to match
+        const rawDomain =
+          handle_accounts && account.domain
+            ? account.domain
+            : user[target_trait];
+        const domain = domainUtils.normalize(rawDomain);
+        if (!domain) {
+          return skip({
+            reason: "Could not find a domain",
+            target: target_trait,
+            domain
+          });
+        }
+
+        // Skip because domain is invalid
+        if (!domainUtils.verify(domain)) {
+          return skip({
+            reason: "Domain invalid",
+            domain
+          });
+        }
+
+        // Skip because we are already enriched
+        const rank = datanyzeAccount.rank || user["traits_datanyze/rank"];
+        if (!!rank && !isBatch && !queued) {
+          return skip({
+            reason: "Already fetched datanyze/rank"
+          });
+        }
+
+        // Skip because domain is in the excluded domains list
+        const skip_search = _.includes(
+          _.map(excluded_domains.split(","), d => d.trim()),
           domain
-        });
-        return Promise.resolve();
-      }
-
-      if (!domainUtils.verify(domain)) {
-        asUser.logger.info("outgoing.user.skip", {
-          reason: "Domain invalid",
-          domain,
-        });
-        return Promise.resolve();
-      }
-
-      const rank = user["traits_datanyze/rank"];
-      if (!!rank && !isBatch && !queued) {
-        asUser.logger.info("outgoing.user.skip", {
-          reason: "Already fetched datanyze/rank"
-        });
-        return Promise.resolve();
-      }
-
-      const skip_search = _.includes(_.map(excluded_domains.split(","), d => d.trim()), domain);
-      if (!!skip_search) {
-        asUser.logger.info("outgoing.user.skip", {
-          reason: `blacklisted domain, ${domain}`
-        });
-        return Promise.resolve();
-      }
-
-      const fetched_at = user["traits_datanyze/fetched_at"];
-      if (!!fetched_at && !isBatch && !queued) {
-        asUser.logger.info("outgoing.user.skip", {
-          reason: `Already fetched at: ${fetched_at}`
-        });
-        return Promise.resolve();
-      }
-
-      const error = user["traits_datanyze/error"];
-      if (error && !isBatch && !queued) {
-        asUser.logger.info("outgoing.user.skip", {
-          reason: "Already fetched datanyze/error",
-          error,
-        });
-        return Promise.resolve();
-      }
-
-      asUser.logger.info("outgoing.user.start", { domain });
-
-      const datanyze = new Datanyze({ email: username, token, cache, logger: asUser.logger, metric });
-
-      return datanyze.getDomainInfo(domain).then(data => {
-        asUser.logger.debug("outgoing.user.fetch.response", { response: data });
-
-        if (!data) {
-          asUser.logger.error("outgoing.user.error", { errors: "No Data" });
-          return Promise.resolve();
+        );
+        if (!!skip_search) {
+          return skip({
+            reason: `blacklisted domain, ${domain}`
+          });
         }
-        if (data.error && !data.error.redirect_url) {
-          asUser.logger.error("outgoing.user.error", { errors: data.error });
 
-          if (data.error === 103 && attempt <= 2) {
-            asUser.logger.debug("outgoing.user.fetch.addDomain.attempt", { attempt });
+        // Skip because we already have a Fetched date
+        const fetched_at =
+          datanyzeAccount.fetched_at || user["traits_datanyze/fetched_at"];
 
-            return datanyze.addDomain(domain)
-              .then(() => {
-                asUser.logger.debug("outgoing.user.fetch.addDomain.queue");
+        if (!!fetched_at && !isBatch && !queued) {
+          return skip({
+            reason: `Already fetched at: ${fetched_at}`
+          });
+        }
 
-                return ctx.enqueue("refetchDomainInfo", {
-                  message,
-                  attempt
-                }, {
-                  delay: process.env.ADD_DOMAIN_DELAY || 1800000
-                });
-              }, (err) => asUser.logger.debug("fetch.addDomain.queue.error", { errors: err }));
+        // Skip because we had an error
+        const error = datanyzeAccount.error || user["traits_datanyze/error"];
+        if (error && !isBatch && !queued) {
+          return skip({
+            reason: "Already fetched datanyze/error",
+            error
+          });
+        }
+
+        const datanyze = new Datanyze({
+          email: username,
+          token,
+          cache,
+          logger: targetClient.logger,
+          metric
+        });
+
+        return datanyze.getDomainInfo(domain).then(
+          data => {
+            targetClient.logger.debug(`outgoing.${type}.fetch.response`, {
+              response: data
+            });
+
+            if (!data) {
+              targetClient.logger.error(`outgoing.${type}.error`, {
+                errors: "No Data"
+              });
+              return Promise.resolve();
+            }
+            if (data.error && !data.error.redirect_url) {
+              targetClient.logger.error(`outgoing.${type}.error`, {
+                errors: data.error
+              });
+
+              if (data.error === 103 && attempt <= 2) {
+                targetClient.logger.debug(
+                  `outgoing.${type}.fetch.addDomain.attempt`,
+                  {
+                    attempt
+                  }
+                );
+
+                return datanyze.addDomain(domain).then(
+                  () => {
+                    targetClient.logger.debug(
+                      `outgoing.${type}.fetch.addDomain.queue`
+                    );
+
+                    return ctx.enqueue(
+                      "refetchDomainInfo",
+                      {
+                        message,
+                        attempt
+                      },
+                      {
+                        delay: process.env.ADD_DOMAIN_DELAY || 1800000
+                      }
+                    );
+                  },
+                  err =>
+                    targetClient.logger.debug("fetch.addDomain.queue.error", {
+                      errors: err
+                    })
+                );
+              }
+              targetClient.logger.debug(
+                `outgoing.${type}.fetch.addDomain.error`,
+                {
+                  attempt,
+                  domain,
+                  errors: data.error
+                }
+              );
+              return Promise.resolve();
+            }
+
+            const technologies = _.map(data.technologies, t => t.name);
+            const payload = { ...data, technologies };
+            payload.fetched_at = new Date().toISOString();
+            targetClient.logger.info(`outgoing.${type}.success`);
+            metric.increment(`ship.outgoing.${type}s`);
+
+            return targetClient.traits(payload, { source: "datanyze" });
+          },
+          err => {
+            targetClient.logger.error(`outgoing.${type}.error`, {
+              errors: err
+            });
           }
-          asUser.logger.debug("outgoing.user.fetch.addDomain.error", { attempt, domain, errors: data.error });
-          return Promise.resolve();
-        }
-
-        const technologies = _.map(data.technologies, t => t.name);
-        const payload = { ...data, technologies };
-        payload.fetched_at = new Date().toISOString();
-        asUser.logger.info("outgoing.user.success");
-        metric.increment("ship.outgoing.users");
-
-        return asUser.traits(payload, { source: "datanyze" });
-      }, err => {
-        asUser.logger.error("outgoing.user.error", { errors: err });
-      });
-    }));
+        );
+      })
+    );
   } catch (e) {
     client.logger.debug("outgoing.user.error", { errors: e.stack || e });
   }
