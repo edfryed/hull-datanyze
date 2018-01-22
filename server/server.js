@@ -1,4 +1,3 @@
-/* @flow */
 import { notifHandler } from "hull/lib/utils";
 
 import { statusHandler, adminHandler, notifyHandler } from "./handlers";
