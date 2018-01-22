@@ -1,35 +1,31 @@
 /* @flow */
 import express from "express";
-import { notifHandler, smartNotifierHandler } from "hull/lib/utils";
+import { notifHandler } from "hull/lib/utils";
 
+import { statusHandler, adminHandler, notifyHandler } from "./handlers";
 import updateUser from "./lib/update-user";
-import handleAdmin from "./lib/admin";
 
 export default function server(app: express, options: any = {}): express {
   const { connector } = options;
 
-  app.use("/batch", notifHandler({
-    handlers: {
-      "user:update": (ctx, messages = []) => {
-        ctx.client.logger.debug("datanyze.batch.process", { messages: messages.length });
-        return updateUser(ctx, messages, { isBatch: true });
+  app.use(
+    "/batch",
+    notifHandler({
+      handlers: {
+        "user:update": (ctx, messages = []) => {
+          ctx.client.logger.debug("datanyze.batch.process", {
+            messages: messages.length
+          });
+          return updateUser(ctx, messages, { isBatch: true });
+        }
       }
-    }
-  }));
+    })
+  );
 
-  app.use("/notify", notifHandler({
-    handlers: {
-      "user:update": updateUser
-    }
-  }));
-
-  app.use("/smart-notifier", smartNotifierHandler({
-    handlers: {
-      "user:update": updateUser
-    }
-  }));
-
-  app.get("/admin", connector.clientMiddleware(), handleAdmin);
+  app.use("/notify", notifyHandler);
+  app.use("/smart-notifier", notifyHandler);
+  app.get("/admin", connector.clientMiddleware(), adminHandler);
+  app.all("/status", connector.clientMiddleware(), statusHandler);
 
   return app;
 }
