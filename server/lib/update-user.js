@@ -1,4 +1,5 @@
-/* @flow */
+// @flow
+
 import Promise from "bluebird";
 import _ from "lodash";
 import Datanyze from "./datanyze";
