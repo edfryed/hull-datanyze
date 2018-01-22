@@ -1,6 +1,6 @@
 /* @flow */
 import rest from "restler";
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 export default function admin(req: Request, res: Response) {
   const { username, token } = req.hull.ship.private_settings;
   const connectorName = "Datanyze";
