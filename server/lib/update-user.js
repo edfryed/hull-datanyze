@@ -15,8 +15,8 @@ module.exports = function userUpdate(
   if (smartNotifierResponse) {
     smartNotifierResponse.setFlowControl({
       type: "next",
-      size: 100,
-      in: 100
+      size: 10,
+      in: 10
     });
   }
 
