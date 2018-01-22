@@ -1,5 +1,5 @@
 /* @flow */
-import express from "express";
+import type express from "express";
 import { notifHandler } from "hull/lib/utils";
 
 import { statusHandler, adminHandler, notifyHandler } from "./handlers";

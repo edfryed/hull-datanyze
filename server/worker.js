@@ -1,5 +1,5 @@
 /* @flow */
-import { Connector } from "hull";
+import type { Connector } from "hull";
 import updateUser from "./lib/update-user";
 
 export default function worker(connector: Connector): Connector {

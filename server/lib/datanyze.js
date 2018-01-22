@@ -10,11 +10,10 @@ class RateLimitError extends Error {
   }
 }
 
-
 function getCacheKey(path, params) {
   return createHash("sha1")
-            .update(JSON.stringify({ path, params }))
-            .digest("hex");
+    .update(JSON.stringify({ path, params }))
+    .digest("hex");
 }
 
 export default class DatanyzeClient {
@@ -23,7 +22,9 @@ export default class DatanyzeClient {
     this.token = token;
     this.cache = cache;
     this.logger = logger;
-    this.baseUrl = process.env.OVERRIDE_DATANYZE_URL || "http://api.datanyze.com";
+    this.metric = metric;
+    this.baseUrl =
+      process.env.OVERRIDE_DATANYZE_URL || "http://api.datanyze.com";
   }
 
   exec(path, params = {}) {
@@ -34,15 +35,15 @@ export default class DatanyzeClient {
       json: true,
       resolveWithFullResponse: true,
       qs: { token, email, ...params }
-    }).then((response) => {
+    }).then(response => {
       const body = response.body;
       if (body && response.statusCode === 200) {
-        if (path!=="limits") {
-          this.metric.increment("ship.service_api.call")
+        if (path !== "limits") {
+          this.metric.increment("ship.service_api.call");
         }
         return body;
       }
-      this.metric.increment("ship.service_api.error")
+      this.metric.increment("ship.service_api.error");
       const err = new Error(response.statusMessage);
       err.statusCode = response.statusCode;
       return Promise.reject(err);
@@ -53,15 +54,27 @@ export default class DatanyzeClient {
     if (this.cache && this.cache.wrap) {
       const cacheKey = getCacheKey(path, params);
       return this.cache.wrap(cacheKey, () => {
-        return this.getLimits().then((limits = {}) => {
-          const { api_hourly, api_daily, api_monthly_limit, api_monthly } = limits;
-          this.metric.value("ship.service_api.remaining", api_monthly_limit - api_monthly);
-          if (api_hourly >= (6 * api_monthly_limit / (30 * 24)) || api_daily >= api_monthly_limit / 30) {
-            throw new RateLimitError(limits);
-          }
-          return this.exec(path, params);
-        })
-          .catch((error) => {
+        return this.getLimits()
+          .then((limits = {}) => {
+            const {
+              api_hourly,
+              api_daily,
+              api_monthly_limit,
+              api_monthly
+            } = limits;
+            this.metric.value(
+              "ship.service_api.remaining",
+              api_monthly_limit - api_monthly
+            );
+            if (
+              api_hourly >= 6 * api_monthly_limit / (30 * 24) ||
+              api_daily >= api_monthly_limit / 30
+            ) {
+              throw new RateLimitError(limits);
+            }
+            return this.exec(path, params);
+          })
+          .catch(error => {
             this.logger.debug("datanyze.request.error", { errors: error });
           });
       });
@@ -71,12 +84,11 @@ export default class DatanyzeClient {
   }
 
   getDomainInfo(domain, tech_details = true) {
-    return this.request("domain_info", { domain, tech_details })
-      .then(data => {
-        if (!data) return {};
-        data.technologies = _.values(data.technologies || {});
-        return _.omit(data, ["mobile"]);
-      });
+    return this.request("domain_info", { domain, tech_details }).then(data => {
+      if (!data) return {};
+      data.technologies = _.values(data.technologies || {});
+      return _.omit(data, ["mobile"]);
+    });
   }
 
   addDomain(domain) {
