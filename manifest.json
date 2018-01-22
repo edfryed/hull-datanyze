@@ -3,6 +3,8 @@
   "description": "Maximize account-based engagement with Datanyze data in all your tools",
   "tags": ["outgoing", "batch", "oneColumn", "smart-notifier"],
   "admin": "/admin/",
+  "source": "datanyze",
+  "logo": "logo.png",
   "picture": "picture.png",
   "ui": false,
   "readme" : "readme.md",
@@ -39,15 +41,9 @@
       "name": "synchronized_segments",
       "title": "Enrich users belonging to one of these segments",
       "default": [],
+      "description": "The above list of segments is a whitelist. You need to *explicitely specify one or more segments* for which enrichment shall be performed.<br/> If you do not specify any segment, no user will be sent to the Datanyze API.",
       "type": "array",
       "format": "segment"
-    },
-    {
-      "name": "synchronized_segments_hero",
-      "type": "string",
-      "headerTemplate": "The above list of segments is a whitelist. You need to *explicitely specify one or more segments* for which enrichment shall be performed.<br>If you do not specify any segment, no user will be sent to the Datanyze API.",
-      "format": "information",
-      "title": "Whitelisted Segments"
     },
     {
       "name": "target_trait",
@@ -60,18 +56,26 @@
     {
       "name":"excluded_domains",
       "title": "Excluded the following domains from Enrichment",
-      "description":"Please specify domain values as comma-separated list.",
+      "description":"Please specify domain values as comma-separated list. The above list of domains is a blacklist. You need to *explicitely specify one or more domains* for which enrichment shall be skipped. If you do not specify any domain, the connector will perform a call to the Datanyze API for every user matching one of the whitelisted segments. Please note that each call will count towards your monthly rate limit.",
       "type": "string",
       "format": "text"
     },
     {
-      "name": "excluded_domains_hero",
-      "type": "string",
-      "headerTemplate": "The above list of domains is a blacklist. You need to *explicitely specify one or more domains* for which enrichment shall be skipped.<br>If you do not specify any domain, the connector will perform a call to the Datanyze API for every user matching one of the whitelisted segments. Please note that each call will count towards your monthly rate limit.",
-      "format": "information",
-      "title": "Blacklisted Domains"
+      "name":"handle_accounts",
+      "title": "Handle Accounts",
+      "description":"If active, Data will be written at Account level in addition to User level. We will also use the Account domain field to query Datanyze - This overwrites the 'Company Domain' setting.",
+      "type": "boolean",
+      "default": false,
+      "format": "checkbox"
     }
   ],
   "resources": [],
+  "schedules" : [
+    {
+      "url": "/status",
+      "type": "interval",
+      "value": 5
+    }
+  ],
   "subscriptions" : [ { "url" : "/smart-notifier" } ]
 }
