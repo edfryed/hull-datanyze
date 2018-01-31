@@ -14,8 +14,6 @@ module.exports = function userUpdate(ctx: Object, messages:Array<Object> = [], {
 
       const { target_trait, username, token, excluded_domains = "" } = ship.private_settings;
       const asUser = client.asUser(_.pick(user, "id", "email", "external_id"));
-
-      asUser.logger.debug("user.notification.update");
       if (!token) {
         asUser.logger.info("outgoing.user.skip", {
           reason: "token.missing"
