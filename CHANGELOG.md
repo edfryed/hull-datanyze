@@ -1,3 +1,10 @@
+## v0.2.6
+- ignore `datanyze/mobile` object
+
+## v0.2.5
+- documentation
+- improved admin panel
+
 ## v0.2.4
 - load queue adapter properly
 

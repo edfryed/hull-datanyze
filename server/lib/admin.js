@@ -4,7 +4,6 @@ import { Request, Response } from "express";
 export default function admin(req: Request, res: Response) {
   const { username, token } = req.hull.ship.private_settings;
   const connectorName = "Datanyze";
-  console.log(req.hull.ship.private_settings);
   if (!username || !token) {
     res.render("noauthconfig.html", { name: connectorName });
   } else {
