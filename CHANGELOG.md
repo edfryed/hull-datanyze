@@ -1,6 +1,6 @@
 ## v0.3.0
 
-* upgrade hull to 0.13.6 + add support for smart-notifier
+* upgrade hull to 0.13.10 + add support for smart-notifier
 * add `handle_accounts` setting to allow writing at Account level, and fetching datanyze data from account. Will help in saving credits.
 * add service_api.call metrics
 * add status endpoint
