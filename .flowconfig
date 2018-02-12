@@ -1,8 +1,13 @@
 [ignore]
 .*/node_modules/.*/\(lib\|test\|examples\).*\.json$
-.*/node_modules/.*\.flow$
+.*/node_modules/documentation/.*
+
 [include]
 
-[libs]
+[lints]
+all=warn
 
 [options]
+include_warnings=true
+
+[libs]

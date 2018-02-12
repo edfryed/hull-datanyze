@@ -35,7 +35,13 @@ if (REDIS_URL) {
   cache = new Cache({
     store: "memory",
     max: 1000,
-    ttl
+    ttl,
+    isCacheableValue: (value) => {
+      if (value && value.error === 103) {
+        return false;
+      }
+      return value !== undefined && value !== null;
+    }
   });
 }
 
