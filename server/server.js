@@ -1,6 +1,6 @@
 import { notifHandler } from "hull/lib/utils";
 
-import { statusHandler, adminHandler, notifyHandler } from "./handlers";
+import { statusHandler, adminHandler, notifyHandler, smartNotifyHandler } from "./handlers";
 import updateUser from "./lib/update-user";
 
 export default function server(app, options = {}): express {
@@ -21,7 +21,7 @@ export default function server(app, options = {}): express {
   );
 
   app.use("/notify", notifyHandler);
-  app.use("/smart-notifier", notifyHandler);
+  app.use("/smart-notifier", smartNotifyHandler);
   app.get("/admin", connector.clientMiddleware(), adminHandler);
   app.all("/status", connector.clientMiddleware(), statusHandler);
 
