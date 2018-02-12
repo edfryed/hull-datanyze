@@ -54,6 +54,12 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
+"@newrelic/native-metrics@^2.1.0":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@newrelic/native-metrics/-/native-metrics-2.1.2.tgz#9a595dc602654b717188a294507087a51e79fba3"
+  dependencies:
+    nan "^2.4.0"
+
 "@types/node@^7.0.31":
   version "7.0.38"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.38.tgz#140ecc61930b328e72914237c58dd62c8829e94d"
@@ -283,6 +289,12 @@ async@^0.9.0:
 async@^2.0.1, async@^2.3.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/async/-/async-2.5.0.tgz#843190fd6b7357a0b9e1c956edddd5ec8462b54d"
+  dependencies:
+    lodash "^4.14.0"
+
+async@^2.1.4:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/async/-/async-2.6.0.tgz#61a29abb6fcc026fea77e56d1c6ec53a795951f4"
   dependencies:
     lodash "^4.14.0"
 
@@ -2679,7 +2691,7 @@ https-browserify@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-0.0.1.tgz#3f91365cabe60b77ed0ebba24b454e3e09d95a82"
 
-https-proxy-agent@^0.3.5:
+https-proxy-agent@^0.3.5, https-proxy-agent@^0.3.6:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-0.3.6.tgz#713fa38e5d353f50eb14a342febe29033ed1619b"
   dependencies:
@@ -2687,9 +2699,9 @@ https-proxy-agent@^0.3.5:
     debug "2"
     extend "3"
 
-hull-client@1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/hull-client/-/hull-client-1.1.4.tgz#3a79aa983f44abeec962255bf7de2d980ea94eb2"
+hull-client@1.1.5:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/hull-client/-/hull-client-1.1.5.tgz#f01d5179f0297b69a33c70405e437d5b4b95b3bb"
   dependencies:
     jwt-simple "^0.5.0"
     lodash "^4.13.1"
@@ -2698,9 +2710,9 @@ hull-client@1.1.4:
     uuid "^3.0.1"
     winston "^2.2.0"
 
-hull@0.13.6:
-  version "0.13.6"
-  resolved "https://registry.yarnpkg.com/hull/-/hull-0.13.6.tgz#e09643bfda12ee42e29c605cbe4d9b196de9f3c2"
+hull@0.13.10:
+  version "0.13.10"
+  resolved "https://registry.yarnpkg.com/hull/-/hull-0.13.10.tgz#7c9f55a7e3bca13be55eab5414973162444a1acd"
   dependencies:
     JSONStream "^1.1.2"
     aws-sdk "^2.81.0"
@@ -2717,14 +2729,13 @@ hull@0.13.6:
     del "^2.2.1"
     dogapi "^2.6.0"
     ejs "^2.5.6"
-    express "^4.14.0"
-    hull-client "1.1.4"
+    hull-client "1.1.5"
     jsonwebtoken "^7.4.3"
     jwt-simple "^0.5.0"
     kue "^0.11.5"
     kue-ui "^0.1.0"
     lodash "^4.13.1"
-    newrelic "^1.39.0"
+    newrelic "^2.4.1"
     passport "^0.3.2"
     promise-streams "^1.0.1"
     raven "^1.1.2"
@@ -2782,7 +2793,7 @@ inflight@^1.0.4:
     once "^1.3.0"
     wrappy "1"
 
-inherits@2, inherits@2.0.3, inherits@^2.0.1, inherits@~2.0.0, inherits@~2.0.1:
+inherits@2, inherits@2.0.3, inherits@^2.0.1, inherits@~2.0.0, inherits@~2.0.1, inherits@~2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.3.tgz#633c2c83e3da42a502f52466022480f4208261de"
 
@@ -3770,6 +3781,10 @@ nan@^2.3.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.4.0.tgz#fb3c59d45fe4effe215f0b890f8adf6eb32d2232"
 
+nan@^2.4.0:
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/nan/-/nan-2.8.0.tgz#ed715f3fe9de02b57a5e6252d90a96675e1f085a"
+
 native-promise-only@^0.8.1:
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/native-promise-only/-/native-promise-only-0.8.1.tgz#20a318c30cb45f71fe7adfbf7b21c99c1472ef11"
@@ -3796,7 +3811,7 @@ nested-error-stacks@^1.0.0:
   dependencies:
     inherits "~2.0.1"
 
-newrelic@^1.39.0, newrelic@^1.39.1:
+newrelic@^1.39.1:
   version "1.39.1"
   resolved "https://registry.yarnpkg.com/newrelic/-/newrelic-1.39.1.tgz#9d73571d77a436c3916d32b7fe2ae3a9dfd6bb17"
   dependencies:
@@ -3805,6 +3820,19 @@ newrelic@^1.39.0, newrelic@^1.39.1:
     json-stringify-safe "^5.0.0"
     readable-stream "^1.1.13"
     semver "^5.3.0"
+
+newrelic@^2.4.1:
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/newrelic/-/newrelic-2.7.1.tgz#adc5b4dc49b4cdc87910fd587b3c5cc956abeadc"
+  dependencies:
+    async "^2.1.4"
+    concat-stream "^1.5.0"
+    https-proxy-agent "^0.3.6"
+    json-stringify-safe "^5.0.0"
+    readable-stream "^2.1.4"
+    semver "^5.3.0"
+  optionalDependencies:
+    "@newrelic/native-metrics" "^2.1.0"
 
 ngrok@^2.2.14:
   version "2.2.15"
@@ -4284,6 +4312,10 @@ process-nextick-args@~1.0.6:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-1.0.7.tgz#150e20b756590ad3f91093f25a4f2ad8bff30ba3"
 
+process-nextick-args@~2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.0.tgz#a37d732f4271b4ab1ad070d35508e8290788ffaa"
+
 process@^0.11.0:
   version "0.11.9"
   resolved "https://registry.yarnpkg.com/process/-/process-0.11.9.tgz#7bd5ad21aa6253e7da8682264f1e11d11c0318c1"
@@ -4611,6 +4643,18 @@ readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.0.5, readable
     string_decoder "~0.10.x"
     util-deprecate "~1.0.1"
 
+readable-stream@^2.1.4:
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.3.4.tgz#c946c3f47fa7d8eabc0b6150f4a12f69a4574071"
+  dependencies:
+    core-util-is "~1.0.0"
+    inherits "~2.0.3"
+    isarray "~1.0.0"
+    process-nextick-args "~2.0.0"
+    safe-buffer "~5.1.1"
+    string_decoder "~1.0.3"
+    util-deprecate "~1.0.1"
+
 readable-stream@~1.0.2:
   version "1.0.34"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-1.0.34.tgz#125820e34bc842d2f2aaafafe4c2916ee32c157c"
@@ -4855,7 +4899,7 @@ rx-lite@^3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/rx-lite/-/rx-lite-3.1.2.tgz#19ce502ca572665f3b647b10939f97fd1615f102"
 
-safe-buffer@^5.0.1:
+safe-buffer@^5.0.1, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.1.tgz#893312af69b2123def71f57889001671eeb2c853"
 
@@ -5245,6 +5289,12 @@ string_decoder@^0.10.25, string_decoder@~0.10.x:
   version "0.10.31"
   resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-0.10.31.tgz#62e203bc41766c6c28c9fc84301dab1c5310fa94"
 
+string_decoder@~1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-1.0.3.tgz#0fc67d7c141825de94282dd536bec6b9bce860ab"
+  dependencies:
+    safe-buffer "~5.1.0"
+
 stringstream@~0.0.4:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/stringstream/-/stringstream-0.0.5.tgz#4e484cd4de5a0bbbee18e46307710a8a81621878"
@@ -5510,6 +5560,15 @@ type-is@~1.6.15, type-is@~1.6.6:
 typedarray@~0.0.5:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
+
+uglify-js@^2.4.19:
+  version "2.8.29"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-2.8.29.tgz#29c5733148057bb4e1f75df35b7a9cb72e6a59dd"
+  dependencies:
+    source-map "~0.5.1"
+    yargs "~3.10.0"
+  optionalDependencies:
+    uglify-to-browserify "~1.0.0"
 
 uglify-js@^2.6, uglify-js@^2.6.1, uglify-js@~2.7.3:
   version "2.7.5"
