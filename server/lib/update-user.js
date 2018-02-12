@@ -42,7 +42,7 @@ module.exports = function userUpdate(
           : client.asUser(user);
 
         const datanyzeAccount = handle_accounts
-          ? _.get(client.utils.groupTraits(account), "datanyze", {})
+          ? _.get(client.utils.traits.group(account), "datanyze", {})
           : {};
 
         const type = handle_accounts ? "account" : "user";
@@ -75,15 +75,13 @@ module.exports = function userUpdate(
         }
 
         // Skip because can't find a Domain name to match
-        const rawDomain =
-          handle_accounts && account.domain
-            ? account.domain
-            : user[target_trait];
+        const rawDomain = handle_accounts ? account.domain : user[target_trait];
         const domain = domainUtils.normalize(rawDomain);
         if (!domain) {
           return skip({
             reason: "Could not find a domain",
-            target: target_trait,
+            handle_accounts,
+            rawDomain,
             domain
           });
         }

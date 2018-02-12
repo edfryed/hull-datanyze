@@ -63,7 +63,7 @@
     {
       "name":"handle_accounts",
       "title": "Handle Accounts",
-      "description":"If active, Data will be written at Account level in addition to User level. We will also use the Account domain field to query Datanyze - This overwrites the 'Company Domain' setting.",
+      "description":"If active, Data will be written at Account level. The Account Domain field will be used to query Datanyze",
       "type": "boolean",
       "default": false,
       "format": "checkbox"
