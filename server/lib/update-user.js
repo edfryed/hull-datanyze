@@ -22,7 +22,6 @@ module.exports = function userUpdate(
     });
   }
 
-
   return Promise.all(messages.map((message) => {
     const { user = {}, account, segments = [] } = message;
     const userSegmentIds = _.compact(segments).map(s => s.id);
@@ -36,8 +35,8 @@ module.exports = function userUpdate(
       excluded_domains = ""
     } = ship.private_settings;
 
-    // Build a target client, which will be
-    // either scoped to account or user depending on the manifest setting
+      // Build a target client, which will be
+      // either scoped to account or user depending on the manifest setting
     const targetClient = handle_accounts
       ? client.asAccount(account)
       : client.asUser(user);
@@ -56,7 +55,7 @@ module.exports = function userUpdate(
       return Promise.resolve();
     };
 
-    // Skip because we don't have a token
+      // Skip because we don't have a token
     if (!token) return skip({ reason: "token.missing" });
 
     // Skip because we don't have a username
@@ -69,7 +68,7 @@ module.exports = function userUpdate(
 
     // Skip because user segments don't match
     const matchingSegments =
-      _.intersection(userSegmentIds, synchronized_segments).length > 0;
+        _.intersection(userSegmentIds, synchronized_segments).length > 0;
 
     if (!matchingSegments && !isBatch) {
       return skip({ reason: "datanyze.user.segments_skip" });
@@ -116,7 +115,7 @@ module.exports = function userUpdate(
 
     // Skip because we already have a Fetched date
     const fetched_at =
-      datanyzeAccount.fetched_at || user["traits_datanyze/fetched_at"];
+        datanyzeAccount.fetched_at || user["traits_datanyze/fetched_at"];
 
     if (!!fetched_at && !isBatch && !queued) {
       return skip({
@@ -212,7 +211,7 @@ module.exports = function userUpdate(
         });
       }
     );
-  })).catch(e => {
+  })).catch((e) => {
     client.logger.debug("outgoing.user.error", { errors: e.stack || e });
   });
 };
