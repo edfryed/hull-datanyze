@@ -8,7 +8,9 @@ import KueAdapter from "hull/lib/infra/queue/adapter/kue";
 import server from "./server";
 import worker from "./worker";
 
-const { PORT = 8082, KUE_PREFIX = "hull-datanyze", SECRET, REDIS_URL, LOG_LEVEL, OVERRIDE_FIREHOSE_URL } = process.env;
+const {
+  PORT = 8082, KUE_PREFIX = "hull-datanyze", SECRET, REDIS_URL, LOG_LEVEL, OVERRIDE_FIREHOSE_URL
+} = process.env;
 
 if (LOG_LEVEL) {
   Hull.logger.transports.console.level = LOG_LEVEL;

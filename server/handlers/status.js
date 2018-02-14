@@ -18,15 +18,11 @@ export default function statusCheck(req, res) {
 
   if (!token || !username) {
     status = "warning";
-    messages.push(
-      "No Credentials stored, connector is inactive. Enter Username and Token in Settings"
-    );
+    messages.push("No Credentials stored, connector is inactive. Enter Username and Token in Settings");
   }
   if (!any_enabled) {
     status = "warning";
-    messages.push(
-      "Enrich enabled, but no segments are listed. No one will be enriched"
-    );
+    messages.push("Enrich enabled, but no segments are listed. No one will be enriched");
   }
 
   if (status !== "ok") return reply(status, messages);
@@ -36,7 +32,7 @@ export default function statusCheck(req, res) {
     json: true,
     resolveWithFullResponse: true,
     qs: { token, email: username }
-  }).then(response => {
+  }).then((response) => {
     const body = response.body;
     if (body && response.statusCode === 200) {
       const { api_monthly, api_monthly_limit } = body;

@@ -1,4 +1,5 @@
 import rest from "restler";
+
 export default function admin(req, res) {
   const { username, token } = req.hull.ship.private_settings;
   const connectorName = "Datanyze";

@@ -3,7 +3,7 @@ import { notifHandler } from "hull/lib/utils";
 import { statusHandler, adminHandler, notifyHandler, smartNotifyHandler } from "./handlers";
 import updateUser from "./lib/update-user";
 
-export default function server(app, options = {}): express {
+export default function server(app, options = {}) {
   const { connector } = options;
 
   app.use(

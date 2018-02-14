@@ -17,7 +17,9 @@ function getCacheKey(path, params) {
 }
 
 export default class DatanyzeClient {
-  constructor({ metric, email, token, cache, logger }) {
+  constructor({
+    metric, email, token, cache, logger
+  }) {
     this.email = email;
     this.token = token;
     this.cache = cache;
@@ -35,7 +37,7 @@ export default class DatanyzeClient {
       json: true,
       resolveWithFullResponse: true,
       qs: { token, email, ...params }
-    }).then(response => {
+    }).then((response) => {
       const body = response.body;
       if (body && response.statusCode === 200) {
         if (path !== "limits") {
@@ -67,14 +69,14 @@ export default class DatanyzeClient {
               api_monthly_limit - api_monthly
             );
             if (
-              api_hourly >= 6 * api_monthly_limit / (30 * 24) ||
+              api_hourly >= (6 * api_monthly_limit) / (30 * 24) ||
               api_daily >= api_monthly_limit / 30
             ) {
               throw new RateLimitError(limits);
             }
             return this.exec(path, params);
           })
-          .catch(error => {
+          .catch((error) => {
             this.logger.debug("datanyze.request.error", { errors: error });
           });
       });
@@ -84,7 +86,7 @@ export default class DatanyzeClient {
   }
 
   getDomainInfo(domain, tech_details = true) {
-    return this.request("domain_info", { domain, tech_details }).then(data => {
+    return this.request("domain_info", { domain, tech_details }).then((data) => {
       if (!data) return {};
       data.technologies = _.values(data.technologies || {});
       return _.omit(data, ["mobile"]);
