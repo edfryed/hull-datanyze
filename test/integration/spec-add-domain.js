@@ -32,8 +32,21 @@ describe("add domain operation", function test() {
 
   it("should try to add new domain 2 times", (done) => {
     minidatanyze.stubApp("/domain_info")
+      .onFirstCall()
       .respond({
         error: 103
+      })
+      .onSecondCall()
+      .respond({
+        foo: "bar",
+        mobile: { crazy: "Stuff" },
+        technologies: [
+          {
+            name: "scala",
+          }, {
+            name: "react",
+          }
+        ]
       });
 
     minidatanyze.stubApp("/add_domain")
@@ -45,9 +58,14 @@ describe("add domain operation", function test() {
       events: [],
       segments: [{ id: "A" }]
     }).then(() => {});
+    minidatanyze.on("incoming.request", req => console.log(">>> DATANUZe", req.method, req.url));
 
     minidatanyze.on("incoming.request#4", (req) => {
       expect(req.url).to.be.eql("/add_domain/?token=datanyzeABC&email=datanyzeDEF&domain=foo.bar");
+    });
+
+    minidatanyze.on("incoming.request#6", (req) => {
+      expect(req.url).to.be.eql("/domain_info/?token=datanyzeABC&email=datanyzeDEF&domain=foo.bar&tech_details=true");
       done();
     });
   });
