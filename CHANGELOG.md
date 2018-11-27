@@ -1,3 +1,6 @@
+## v0.3.1
+* prevent flatmap-stream@0.1.1 from installing, removing `nodemon` which is unused
+
 ## v0.3.0
 
 * upgrade hull to 0.13.10 + add support for smart-notifier
