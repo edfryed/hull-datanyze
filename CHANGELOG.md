@@ -1,3 +1,6 @@
+## v0.3.2
+* upgrade hull-node
+
 ## v0.3.1
 * prevent flatmap-stream@0.1.1 from installing, removing `nodemon` which is unused
 
