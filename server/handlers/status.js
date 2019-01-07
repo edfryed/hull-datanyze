@@ -38,11 +38,11 @@ export default function statusCheck(req, res) {
       const { api_monthly, api_monthly_limit } = body;
       if (api_monthly < api_monthly_limit / 10) {
         return reply("warning", [
-          `Low API Calls Remaining: ${api_monthly}/${api_monthly_limit}`
+          `API Calls monthly allowance almost reached: ${api_monthly}/${api_monthly_limit}`
         ]);
       }
       return reply("ok", [
-        `API Calls Remaining: ${api_monthly}/${api_monthly_limit}`
+        `API Calls consumed from monthly allowance: ${api_monthly}/${api_monthly_limit}`
       ]);
     }
     return reply("error", [
